@@ -1,414 +1,163 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  <meta name="baidu-site-verification" content="L6Lm9d5Crl"/>
-  
-   
-    <meta name="keywords" content="Prime Numbers" />
-  
-  
-  
-  <title>Tag: Prime Numbers | Adnatul&#39;s Blog</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Adnatul&#39;s Blog">
-<meta property="og:url" content="http://localhost:4000/tags/Prime-Numbers/index.html">
-<meta property="og:site_name" content="Adnatul&#39;s Blog">
-<meta property="og:locale" content="EN">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Adnatul&#39;s Blog">
-  
-  
-    <link rel="icon" href="/img/logo.jpg">
-  
-  
-  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
-  
-  <link rel="stylesheet" href="/css/style.css">
-  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  
-  
-      <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  
-  <!-- 加载特效 -->
-    <script src="/js/pace.js"></script>
-    <link href="/css/pace/pace-theme-flash.css" rel="stylesheet" />
-  <script>
-      var yiliaConfig = {
-          fancybox: true,
-          animate: true,
-          isHome: false,
-          isPost: false,
-          isArchive: false,
-          isTag: true,
-          isCategory: false,
-          open_in_new: false
-      }
-  </script>
+    <meta charset="UTF-8" />
+
+    
+
+    
+
+    <title>Mot-clé: Prime Numbers | Adnatul&#39;s Blog</title>
+    <meta name="author" content="Adnatull Al Masum" />
+    <meta name="version" content="1.0.0" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+    <meta name="baidu-site-verification" content="F0CXvmUgA9" />
+
+    
+    
+    <link rel="icon" href="/favicon.png">
+    
+
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <div id="container">
-    <div class="left-col">
-    <div class="overlay"></div>
-<div class="intrude-less">
-    <header id="header" class="inner">
-        <script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
-        <a href="/" class="profilepic">
-            
-            <img lazy-src="/img/logo.jpg" class="js-avatar">
-            
-        </a>
-        <hgroup>
-          <h1 class="header-author" ><a href="/">Adnatull Al Masum</a></h1>
 
-        </hgroup>
-        
+    <div class="app">
+        <header class="header clearfix">
+    <div id="nav" class="nav">
+    <button id="open-panel" class="open-panel"><i class="icon-library"></i></button>
 
-          
-              <form>
-                  <input type="text" class="st-default-search-input search" id="local-search-input" placeholder="Search" autocomplete="off">
-              </form>
-              <div id="local-search-result"></div>
+    <nav class="nav-inner">
 
         
         
-            <script type="text/javascript">
-                (function() {
-                    'use strict';
-                    function getMatchData(keyword, data) {
-                        var matchData = [];
-                        for(var i =0;i<data.length;i++){
-                            if(data[i].title.toLowerCase().indexOf(keyword)>=0)
-                                matchData.push(data[i])
-                        }
-                        return matchData;
-                    }
-                    var $input = $('#local-search-input');
-                    var $resultContent = $('#local-search-result');
-                    $input.keyup(function(){
-                        $.ajax({
-                            url: '/search.json',
-                            dataType: "json",
-                            success: function( json ) {
-                                var str='<ul class=\"search-result-list\">';
-                                var keyword = $input.val().trim().toLowerCase();
-                                $resultContent.innerHTML = "";
-                                if ($input.val().trim().length <= 0) {
-                                    $resultContent.empty();
-                                    $('#switch-area').show();
-                                    return;
-                                }
-                                var results = getMatchData(keyword, json);
-                                if(results.length === 0){
-                                    $resultContent.empty();
-                                    $('#switch-area').show();
-                                    return;
-                                }
-                                for(var i =0; i<results.length; i++){
-                                    str += "<li><a href='"+ results[i].url +"' class='search-result-title'>"+ results[i].title +"</a></li>";
-                                }
-                                str += "</ul>";
-                                $resultContent.empty();
-                                $resultContent.append(str);
-                                $('#switch-area').hide();
-                            }
-                        });
-                    });
-                })();
-            </script>
+        <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+        </li>
         
         
-            <div id="switch-btn" class="switch-btn">
-                <div class="icon">
-                    <div class="icon-ctn">
-                        <div class="icon-wrap icon-house" data-idx="0">
-                            <div class="birdhouse"></div>
-                            <div class="birdhouse_holes"></div>
-                        </div>
-                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
-                            <div class="ribbon"></div>
-                        </div>
-                        
-                        
-                        <div class="icon-wrap icon-me hide" data-idx="3">
-                            <div class="user"></div>
-                            <div class="shoulder"></div>
-                        </div>
-                        
-                    </div>
-                </div>
-                <div class="tips-box hide">
-                    <div class="tips-arrow"></div>
-                    <ul class="tips-inner">
-                        <li><a href="/">Home </a></li>
-                        <li><a href="/archives/">All Posts</a></li>
-                        
-                        
-                        <li>About me</li>
-                        
-                    </ul>
-                </div>
-            </div>
         
-        <div id="switch-area" class="switch-area">
-            <div class="switch-wrap">
-                <section class="switch-part switch-part1">
-                    <nav class="header-menu">
-                        <ul>
-                        
-                        </ul>
-                    </nav>
-                    <nav class="header-nav">
-                        <ul class="social">
-                            
-                                <a class="fl github"  target="_blank" href="https://github.com/Adnatull" title="github">github</a>
-                            
-                        </ul>
-                    </nav>
-                </section>
-                
-                <section class="switch-part switch-part2">
-                    <div class="widget tagcloud" id="js-tagcloud">
-                        <a href="/tags/Biginteger-Class/" style="font-size: 10px;">Biginteger Class</a> <a href="/tags/Binary-Search/" style="font-size: 10px;">Binary Search</a> <a href="/tags/Modulus/" style="font-size: 10px;">Modulus</a> <a href="/tags/Number-Theory/" style="font-size: 20px;">Number Theory</a> <a href="/tags/Prime-Numbers/" style="font-size: 10px;">Prime Numbers</a> <a href="/tags/UVA-Online-judge/" style="font-size: 20px;">UVA Online judge</a>
-                    </div>
-                </section>
-                
-                
-                
-                
-                <section class="switch-part switch-part3">
-                
-                    <div id="js-aboutme">Love anime, Programming, Cricket</div>
-                </section>
-                
-            </div>
-        </div>
-    </header>
+
+    </nav>
 </div>
 
-    </div>
-    <div class="mid-col">
-      <nav id="mobile-nav">
-      <div class="overlay">
-          <div class="slider-trigger"></div>
-          <h1 class="header-author js-mobile-header hide"><a href="/" title="Back to Home Page">Adnatull Al Masum</a></h1>
-      </div>
-    <div class="intrude-less">
-        <header id="header" class="inner">
-            <a href="/" class="profilepic">
-                
-                    <img lazy-src="/img/logo.jpg" class="js-avatar">
-                
-            </a>
-            <hgroup>
-              <h1 class="header-author"><a href="/" title="Back to Home Page">Adnatull Al Masum</a></h1>
-            </hgroup>
-            
-            <nav class="header-menu">
-                <ul>
-                
-                <div class="clearfix"></div>
-                </ul>
-            </nav>
-            <nav class="header-nav">
-                <div class="social">
-                    
-                        <a class="github" target="_blank" href="https://github.com/Adnatull" title="github">github</a>
-                    
-                </div>
-            </nav>
-        </header>
-    </div>
-</nav>
+    <aside id="aside" class="aside">
+    <div id="aside-mask" class="aside-mask"></div>
+    <div id="aside-inner" class="aside-inner">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit"><i class="icon-search-stroke"></i></button><input type="hidden" name="sitesearch" value="http://localhost:4000"></form>
 
-      <div class="body-wrap">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a  href="/archives/2018" class="archive-year">2018</a>
+        
+        
+
+        
+        <div class="author-meta">
+            <div class="author-avatar">
+                <a href="/">
+                    <img src="/images/avatar.jpg" title="Sanonz">
+                </a>
+            </div>
+            <div class="author-name">Adnatull Al Masum</div>
+            <div class="author-work">Noobie</div>
+            <div class="author-location">
+                <i class="icon-location vm"></i>
+                <span class="vm">Dhaka, Bangladesh</span>
+            </div>
+            <div class="author-thread-wrap">
+                <div class="author-threads clearfix">
+                    <a class="thread-item" href="https://github.com/adnatull" target="_blank"><i class="icon-github"></i></a>
+                   <a class="thread-item" href="http://facebook.com/aam95" target="_blank"><i class="icon-circle-more"></i></a>
+                    <a class="thread-item" href="https://twitter.com/adnatull" target="_blank"><i class="icon-twitter"></i></a>
+                </div>
+            </div>
         </div>
-        <div class="archives">
+        
+    </div>
+</aside>
+
+</header>
+
+        <div id="content" class="content">
+    <article class="article" itemscope itemprop="blogPost">
     
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-          <div class="article-meta">
-              <a  href="/2018/01/28/UVA-11876-N-NOD-N/" class="archive-article-date">
-      <time datetime="2018-01-28T16:42:39.954Z" itemprop="datePublished">01-28</time>
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2018/01/28/UVA-11876-N-NOD-N/">UVA 11876 - N + NOD (N)</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="/2018/01/28/UVA-11876-N-NOD-N/">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-01-28T16:42:39.954Z" itemprop="datePublished">2018-01-28</time>
 </a>
 
-        </div>
-         
-  
-    <h1 itemprop="name">
-      <a  class="archive-article-title" href="/2018/01/28/UVA-11876-N-NOD-N/">UVA 11876 - N + NOD (N)</a>
-    </h1>
-  
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Binary-Search/">Binary Search</a>, <a class="article-tag-link" href="/tags/Number-Theory/">Number Theory</a>, <a class="article-tag-link" href="/tags/Prime-Numbers/">Prime Numbers</a>, <a class="article-tag-link" href="/tags/UVA-Online-judge/">UVA Online judge</a>
+</div>
 
-
-        <div class="article-info info-on-archive">
-          
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Competitive-Programming/">Competitive Programming</a><a class="article-category-link" href="/categories/Competitive-Programming/UVA-Online-judge/">UVA Online judge</a><a class="article-category-link" href="/categories/Competitive-Programming/UVA-Online-judge/Mathematics/">Mathematics</a><a class="article-category-link" href="/categories/Competitive-Programming/UVA-Online-judge/Mathematics/Number-Theory/">Number Theory</a><a class="article-category-link" href="/categories/Competitive-Programming/UVA-Online-judge/Mathematics/Number-Theory/Prime-Numbers/">Prime Numbers</a><a class="article-category-link" href="/categories/Competitive-Programming/UVA-Online-judge/Problem-Solving-Paradigms/">Problem Solving Paradigms</a><a class="article-category-link" href="/categories/Competitive-Programming/UVA-Online-judge/Problem-Solving-Paradigms/Divide-and-Conquer/">Divide and Conquer</a><a class="article-category-link" href="/categories/Competitive-Programming/UVA-Online-judge/Problem-Solving-Paradigms/Divide-and-Conquer/Binary-Search/">Binary Search</a>
-    </div>
-
-
-          
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Binary-Search/">Binary Search</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Number-Theory/">Number Theory</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Prime-Numbers/">Prime Numbers</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/UVA-Online-judge/">UVA Online judge</a></li></ul>
-    </div>
 
         </div>
-        <div class="clearfix"></div>
     </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
     
+    <section class="article-body markdown-body">
+        
+        <h3 id="Description"><a href="#Description" class="headerlink" title="Description:"></a>Description:</h3><p>For a number N, first have to calculate N-1+divisors(N-1) &amp; store it in array (e.g. arr[i]=arr[i-1]+divisors(arr[i-1])).<br>Make a sequence from 1 to until arr[i] becomes greater than 1000000. Then you will be given two numbers A &amp; B, and you will have to find the number of integers from the above sequence which lies within the range [A,B].</p>
+<p>Hints = No critical case. Easy problem.</p>
+<h3 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm:"></a>Algorithm:</h3><p>Step 1:<br>First find the prime numbers from 1 to 1000000 and store them in an array (was not sure about the range, thats why I calculated till 1000000) .<br>Step 2:<br>Calculate number of divisors for each numbers from 1 to 1000000 and store divisors in each array. (e.g. divisors of 6 are 1,2,3,6. Total 4 divisors. So divisor[6]=4. )<br>Step 3: To find the divisors of each number, I took help of prime numbers. There is a good tutorial in lightoj.com to find divisors using primes. Link is give below:<br><a href="http://lightoj.com/article_show.php?article=1003" target="_blank" rel="noopener">http://lightoj.com/article_show.php?article=1003</a></p>
+<p>To decrease time complexity,<br>I used here some tricks. First one is, when finding the number of divisors of a value, I checked if it is a prime or not. If the number is a prime then the divisors of that number is 2. Because prime numbers are divisible by 1 and the number it self only.<br>If the given number is not prime then I again checked if it is a co-prime. Because we know divisors of co-prime is 3 and they are 1, square root of that number(must be integer value, no fraction) and the number it self. So divisors of co-prime is 3.<br>If the number doesn’t meet the requirement of being prime, co-prime then I followed the algorithm I mentioned at the beginning of this step.<br>Number of divisors for 1 t0 5. divisor[1]=1, divisor[2]=2, divisor[3]=2, divisor[4]=3, divisor[5]=2, divisor[6]=4.</p>
+<p>Step 4: So, I know the number of divisors of values from 1 to 1000000. Now I will calculate the sequence as described in problem description and will store it in a new array (e.g. num[2]=1+divisor[1], so, num[2] = 2, and num[3]=2+divisor[2], so, num[3] = 4).</p>
+<p>Step 5: I will take the input as description. For given A &amp; B, I will do binary search here to find lower bound of A and upper bound of B from num array. (the array which I used to store the sequence of numbers from 1 to 1000000) as problem description.<br>Step 6: Now I will subtract lower bound from upper bound and will save it in a new variable and again I will subtract 1 from this variable and will print this according to instruction. Why I did subtract 1? To understand this I think you need to know how lower bound and upper bound of binary search works!</p>
+<p>I am enclosing the code here. Try not to see my code and try your own. Thanks</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;iostream&gt;</span><br><span class="line">#include&lt;algorithm&gt;</span><br><span class="line">#include&lt;cstdio&gt;</span><br><span class="line">#include&lt;cmath&gt;</span><br><span class="line">#define LL long long</span><br><span class="line">#define L long</span><br><span class="line">using namespace std;</span><br><span class="line">L prime[1234567], mark[12345678],m;</span><br><span class="line">void pr () &#123;</span><br><span class="line">    m=0;</span><br><span class="line">    for (int i=4; i&lt;12345678;i+=2)</span><br><span class="line">        mark[i]=1;</span><br><span class="line">    int N=sqrt(12345678)+1;</span><br><span class="line">    for (int i=3;i&lt;N;i+=2) &#123;</span><br><span class="line">        if (!mark[i]) &#123;</span><br><span class="line">            for (int j=i*i;j&lt;12345678;j=j+i*2) &#123;</span><br><span class="line">                mark[j]=1;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    for (int i=2;i&lt;12345678;i++) &#123;</span><br><span class="line">        if(!mark[i])</span><br><span class="line">            prime[m++]=i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">bool checkprime( L a ) &#123;</span><br><span class="line">    L left = 0, right = m-1, mid;</span><br><span class="line">    while ( left&lt;=right ) &#123;</span><br><span class="line">        mid = (left+right)/2;</span><br><span class="line">        if(prime[mid]==a)</span><br><span class="line">            return true;</span><br><span class="line">        else if (prime[mid]&gt;a)</span><br><span class="line">            right = mid-1;</span><br><span class="line">        else</span><br><span class="line">            left = mid + 1;</span><br><span class="line">    &#125;</span><br><span class="line">    return false;</span><br><span class="line">&#125;</span><br><span class="line">bool chcekcoprime(L a)&#123;</span><br><span class="line">    L x = sqrt(a);</span><br><span class="line">    if(checkprime(x) &amp;&amp; x*x==a)</span><br><span class="line">        return true;</span><br><span class="line">    else return false;</span><br><span class="line">&#125;</span><br><span class="line">L num[1234567],di[1234567];</span><br><span class="line">void divisors () &#123;</span><br><span class="line">    L c=2,d,e,f,g;</span><br><span class="line">    di[1]=1;</span><br><span class="line">    for (L i=2;i&lt;1234567;i++)&#123;</span><br><span class="line">        d = sqrt(i)+1;</span><br><span class="line">        c=1;</span><br><span class="line">        e=i;</span><br><span class="line">        f=1;</span><br><span class="line">        if(checkprime(i))</span><br><span class="line">            c=2;</span><br><span class="line">        else if (chcekcoprime(i))</span><br><span class="line">            c=3;</span><br><span class="line">        else&#123;</span><br><span class="line">            for (L j=0;prime[j]*prime[j]&lt;=e;j++)&#123;</span><br><span class="line">                 f=0;</span><br><span class="line">                while(e%prime[j]==0)&#123;</span><br><span class="line">                   f++;</span><br><span class="line">                    e=e/prime[j];</span><br><span class="line">                &#125;</span><br><span class="line">                c*=(f+1);</span><br><span class="line">            &#125;</span><br><span class="line">            if (e&gt;1) c*=2;</span><br><span class="line">        &#125;</span><br><span class="line">        di[i]=c;</span><br><span class="line">    &#125;</span><br><span class="line">    return ;</span><br><span class="line">&#125;</span><br><span class="line">void nu () &#123;</span><br><span class="line">    num[1]=1;</span><br><span class="line">    for (m=2;m&lt;1234567;m++) &#123;</span><br><span class="line">        num[m]=num[m-1]+di[num[m-1]];</span><br><span class="line">        if(num[m]&gt;1234567)</span><br><span class="line">            break;</span><br><span class="line">    &#125;</span><br><span class="line">    return;</span><br><span class="line">&#125;</span><br><span class="line">L lower (L a) &#123;</span><br><span class="line">    L left = 1, right = m, mid;</span><br><span class="line">    while (left&lt;=right) &#123;</span><br><span class="line">        mid = (left+right)/2;</span><br><span class="line">        if(num[mid]==a)&#123;</span><br><span class="line">            //cout &lt;&lt; mid &lt;&lt; endl;</span><br><span class="line">            right=mid-1;</span><br><span class="line">        &#125;</span><br><span class="line">        else if ( num[mid]&gt;a)</span><br><span class="line">            right = mid-1;</span><br><span class="line">        else</span><br><span class="line">            left = mid + 1;</span><br><span class="line">    &#125;</span><br><span class="line">    return right;</span><br><span class="line">&#125;</span><br><span class="line">L upper (L b) &#123;</span><br><span class="line">      L left = 1, right = m, mid;</span><br><span class="line">    while (left&lt;=right) &#123;</span><br><span class="line">        mid = (left+right)/2;</span><br><span class="line">      //  cout &lt;&lt; mid &lt;&lt; endl;</span><br><span class="line">        if(num[mid]==b)&#123;</span><br><span class="line">            left=mid+1;</span><br><span class="line">        &#125;</span><br><span class="line">        else if ( num[mid]&gt;b)</span><br><span class="line">            right = mid-1;</span><br><span class="line">        else</span><br><span class="line">            left = mid + 1;</span><br><span class="line">    &#125;</span><br><span class="line">    return left;</span><br><span class="line">&#125;</span><br><span class="line">int main() &#123;</span><br><span class="line"> //   freopen( &quot;in.txt&quot;,&quot;r&quot;,stdin );</span><br><span class="line">    pr ();</span><br><span class="line">    divisors();</span><br><span class="line">    nu();</span><br><span class="line">    int n;</span><br><span class="line">    L A,B;</span><br><span class="line">    scanf (&quot;%d&quot;,&amp;n);</span><br><span class="line">    for (int i=1;i&lt;=n;i++) &#123;</span><br><span class="line">        scanf (&quot;%ld %ld&quot;,&amp;A,&amp;B);</span><br><span class="line">        L lo=lower(A), up = upper (B);</span><br><span class="line">        printf (&quot;Case %d: %ld\n&quot;,i,up-lo-1);</span><br><span class="line">    &#125;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+        
+    </section>
+</article>
+
+
+
 
 
 </div>
-      <footer id="footer">
-    <div class="outer">
-        <div id="footer-info">
-            <div class="footer-left">
-                &copy; 2018 Adnatull Al Masum
-            </div>
-            <div class="footer-right">
-                <a href="http://hexo.io/" target="_blank">Hexo &nbsp;&nbsp;</a><a href="https://github.com/maochunguang" target="_blank">Blog</a> by tommy
-            </div>
-        </div>
-        
-            <div class="visit">
-                
-                    <span id="busuanzi_container_site_pv" style='display:none'>
-                        <span id="site-visit" >Total Visits: 
-                            <span id="busuanzi_value_site_uv"></span>
-                        </span>
-                    </span>
-                
-                
-                    <span>, </span>
-                
-                
-                    <span id="busuanzi_container_page_pv" style='display:none'>
-                        <span id="page-visit">Page Visits: 
-                            <span id="busuanzi_value_page_pv"></span>
-                        </span>
-                    </span>
-                
-            </div>
-        
-    </div>
+        <footer class="footer">
+    Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>, Theme by <a href="https://github.com/sanonz/hexo-theme-concise" target="_blank">Concise</a>
 </footer>
 
+
     </div>
-    <script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
-<script src="/js/main.js"></script>
 
-    <script>
-        $(document).ready(function() {
-            var backgroundnum = 1;
-            var backgroundimg = "url(/img/background.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
-            $("#mobile-nav").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
-            $(".left-col").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
-        })
-    </script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/1.9.0/jquery.min.js"></script>
+    
+    <script type="text/javascript">
+        $(function() {
+            var nodes = {
+                nav: $('#nav'),
+                aside: $('#aside'),
+                navTags: $('#nav-tags')
+            };
 
-
-
-<!-- Google Analytics -->
-<script type="text/javascript">
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-ga('create', 'xxxxx', 'auto');
-ga('send', 'pageview');
-
-</script>
-<!-- End Google Analytics -->
-
-
-
-	<script>
-	var _hmt = _hmt || [];
-	(function() {
-	  var hm = document.createElement("script");
-	  hm.src = "//hm.baidu.com/hm.js?xxxxxx";
-	  var s = document.getElementsByTagName("script")[0]; 
-	  s.parentNode.insertBefore(hm, s);
-	})();
-	</script>
-
-
-
-<div class="scroll" id="scroll">
-    <a href="#"><i class="fa fa-arrow-up"></i></a>
-    <a href="#comments"><i class="fa fa-comments-o"></i></a>
-    <a href="#footer"><i class="fa fa-arrow-down"></i></a>
-</div>
-<script>
-    $(document).ready(function() {
-        if ($("#comments").length < 1) {
-            $("#scroll > a:nth-child(2)").hide();
-        };
-    })
-</script>
-
-    <button class="hide-labels">TAG Switch /button>
-    <script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js">
-    </script>
-    <script>
-        $(document).ready(function() {
-            $("button").click(function() {
-                $(".article-info").toggle(200);
+            $('#open-panel, #aside-mask').on('click', function() {
+                nodes.aside.toggleClass('panel-show');
             });
-        });
-    </script>
-
-
-<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
-</script>
-
-  <script language="javascript">
-    $(function() {
-        $("a[title]").each(function() {
-            var a = $(this);
-            var title = a.attr('title');
-            if (title == undefined || title == "") return;
-            a.data('title', title).removeAttr('title').hover(
-            function() {
-                var offset = a.offset();
-                $("<div id=\"anchortitlecontainer\"></div>").appendTo($("body")).html(title).css({
-                    top: offset.top - a.outerHeight() - 15,
-                    left: offset.left + a.outerWidth()/2 + 1
-                }).fadeIn(function() {
-                    var pop = $(this);
-                    setTimeout(function() {
-                        pop.remove();
-                    }, pop.text().length * 800);
-                });
+            $('#nav-tag').on('click', function(event) {
+                event.preventDefault();console.log(nodes.navTags.attr('class'))
+                nodes.navTags.toggleClass('tag-show');console.log(nodes.navTags.attr('class'))
+            })/*.hover(function() {
+                nodes.navTags.addClass('tag-show');
             }, function() {
-                $("#anchortitlecontainer").remove();
-            });
+                nodes.navTags.removeClass('tag-show');
+            });*/
+
+            
         });
-    });
-</script>
+    </script>
 
-
-  </div>
 </body>
 </html>
