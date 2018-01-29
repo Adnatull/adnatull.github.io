@@ -121,8 +121,8 @@
 </pre>
 
 <p>From above tree we see that the solution of T(n) depends on T(n-1) and T(n-1) depends on T(n-2) and so on until  base case T(1)=1 comes. If we know solution of 1 disk we can find the solution of any number of disks as long as there are three pegs only.</p>
-<h4 id="Pseudocode-for-Programming"><a href="#Pseudocode-for-Programming" class="headerlink" title="Pseudocode for Programming"></a>Pseudocode for Programming</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">def TotalMoves(N):</span><br><span class="line">  if N == 1: return 1;</span><br><span class="line">  return TotalMoves(N-1)+1+TotalMoves(N-1);</span><br></pre></td></tr></table></figure>
-<p>We can optimize above pseudocode for better time complexity. We do not need to call <strong>TotalMoves(N-1)</strong> twice. Rather we can just write <strong>2*TotalMoves(N-1)</strong> there. Pseudocode will become -<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">def TotalMoves(N):</span><br><span class="line">  if N == 1: return 1;</span><br><span class="line">  return 2*TotalMoves(N-1)+1;</span><br></pre></td></tr></table></figure></p>
+<h4 id="Pseudocode-for-Programming"><a href="#Pseudocode-for-Programming" class="headerlink" title="Pseudocode for Programming"></a>Pseudocode for Programming</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">def TotalMoves(N):</span><br><span class="line">  if N == 1: return 1</span><br><span class="line">  return TotalMoves(N-1)+1+TotalMoves(N-1)</span><br></pre></td></tr></table></figure>
+<p>We can optimize above pseudocode for better time complexity. We do not need to call <strong>TotalMoves(N-1)</strong> twice. Rather we can just write <strong>2*TotalMoves(N-1)</strong> there. Pseudocode will become -<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">def TotalMoves(N):</span><br><span class="line">  if N == 1: return 1</span><br><span class="line">  return 2*TotalMoves(N-1)+1</span><br></pre></td></tr></table></figure></p>
 <h4 id="Mathematical-Solution"><a href="#Mathematical-Solution" class="headerlink" title="Mathematical Solution"></a>Mathematical Solution</h4>
         
     </section>
@@ -154,7 +154,7 @@
 
 </div>
         <footer class="footer">
-    Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>, Theme by <a href="https://github.com/sanonz/hexo-theme-concise" target="_blank">Concise</a>
+    Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, Theme by <a href="https://github.com/sanonz/hexo-theme-concise" target="_blank">Concise</a>
 </footer>
 
 
