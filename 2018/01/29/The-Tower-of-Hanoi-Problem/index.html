@@ -125,22 +125,24 @@
 <p>We can optimize above pseudocode for better time complexity. We do not need to call <strong>TotalMoves(N-1)</strong> twice. Rather we can just write <strong>2*TotalMoves(N-1)</strong> there. Pseudocode will become -<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">def TotalMoves(N):</span><br><span class="line">  if N == 0: return 0</span><br><span class="line">  return 2*TotalMoves(N-1)+1</span><br></pre></td></tr></table></figure></p>
 <h4 id="Mathematical-Solution"><a href="#Mathematical-Solution" class="headerlink" title="Mathematical Solution"></a>Mathematical Solution</h4><p>From above discussions of recursive solution of The Tower of Hanoi, we can write the recurrence relation. The relation is -<br><strong>T(n)=2*T(n-1)+1</strong></p>
 <pre>
-As we know T[0] = 0, we can write-
-T(0)+1 = 1 ;
-=> T[n]+1 = 2*T[n-1]+1+1
-=> T[n]+1 = 2*T[n-1]+2
-=> T[n]+1 = 2*(T[n-1]+1)
+we know, T[0] = 0
 
 Let, U[n] = T[n]+1
-=>   U[0] = 1
-=>   U[n] = 2*U[n-1]
+So,  U[0] = T[0]+1
+=>        = 1
+
+Now, U[n] = T[n]+1
+=>        = (2*T[n-1]+1)+1
+=>        = 2*T[n-1]+2
+=>        = 2*(T[n-1]+1)
+=>        = 2*U[n-1]
 =>        = 2*2*U[n-2]
 =>        = 2*2*2*U[n-3]
 =>   ...................   
 =>   ...................
 =>   ...................
-=>   U[n] = 2*2*2*...2*1
-=>   U[n] = 2^n  ; At finishing stage total number of 2 will be n. 
+=>        = 2*2*2*...2*1
+=>   U[n] = 2^n  ; At finishing stage total number of 2 will be n.
 =>   T[n]+1 = 2^n
 =>   T[n] = 2^n-1
 </pre>
