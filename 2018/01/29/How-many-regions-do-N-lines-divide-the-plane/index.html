@@ -90,7 +90,7 @@
     
     <section class="article-body markdown-body">
         
-        <h3 id="Explanations"><a href="#Explanations" class="headerlink" title="Explanations:"></a>Explanations:</h3><p><strong>N</strong> straight lines are drawn on a plane paper. Each line intersects with rest all lines. That means <strong>N</strong>‘th line intersects <strong>N-1</strong> lines. You can assume infinite number of lines can be drawn on that paper. You have to find total regions after <strong>N</strong> lines are drawn. <a id="more"></a> An image is given below to understand the problem clearly.</p>
+        <h3 id="Explanations"><a href="#Explanations" class="headerlink" title="Explanations:"></a>Explanations:</h3><p><strong>N</strong> straight lines are drawn on a plane paper. Each line intersects with rest all lines. That means <strong>N</strong>‘th line intersects <strong>N-1</strong> lines. You can assume infinite number of lines can be drawn on that paper. You have to find total regions after <strong>N</strong> lines are drawn. An image is given below to understand the problem clearly.<br><a id="more"></a> </p>
 <center> <img src="\img\Lines in plane..jpg" alt="The Tower of Hanoi"> </center>
 
 <h3 id="Solve-Approach"><a href="#Solve-Approach" class="headerlink" title="Solve Approach:"></a>Solve Approach:</h3><p>From above picture we see that base case L[0] = 1 (here, L = Lines). Whenever a line is drawn it intersects all other lines. Lets try to find the pattern from the picture. L[1] = 2, When 1st line is drawn it intersects 0 line. So, L[1] =  1+L[0] = 1. When 2’th line is drawn it intersects 1 lines. So, L[2] = 2+L[1] . Because when intersecting 1 line it creates 2 new regions. You can see for yourself by drawing on text paper. Again, when 3rd line is drawn it intersects 2 lines and creates 3 new regions. Thus, L[3] = 3+L[2].<br>From observation we see that, when N’th line is drawn and it intersects N-1 lines and creates N new regions. The total regions become new regions + old regions. So, for N lines, L[n] = N+L[n-1]. To know answer of L[n] we need to know L[n-1], To know L[n-1] we need to know L[n-2]….and in ending stage L[0]. Thus, we can say that recurrent solution exists for this problem.</p>
@@ -159,7 +159,7 @@
 
 </div>
         <footer class="footer">
-    Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, Theme by <a href="https://github.com/sanonz/hexo-theme-concise" target="_blank">Concise</a>
+    Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>, Theme by <a href="https://github.com/sanonz/hexo-theme-concise" target="_blank">Concise</a>
 </footer>
 
 
