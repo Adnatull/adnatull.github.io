@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+
+    
+
+    
+
+    <title>How many regions do N lines divide the plane? | Adnatull&#39;s Blog</title>
+    <meta name="author" content="Adnatull Al Masum" />
+    <meta name="version" content="1.0.0" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="Explanations:N straight lines are drawn on a plane paper. Each line intersects with rest all lines. That means N‘th line intersects N-1 lines. You can assume infinite number of lines can be drawn on that paper. You have to find total regions after N " />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+    <meta name="baidu-site-verification" content="F0CXvmUgA9" />
+
+    
+    
+    <link rel="icon" href="/logo.jpg">
+    
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <div class="app">
+        <header class="header clearfix">
+    <div id="nav" class="nav">
+    <button id="open-panel" class="open-panel"><i class="icon-library"></i></button>
+
+    <nav class="nav-inner">
+
+        
+        
+        <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+        </li>
+        
+        
+        
+
+    </nav>
+</div>
+
+    <aside id="aside" class="aside">
+    <div id="aside-mask" class="aside-mask"></div>
+    <div id="aside-inner" class="aside-inner">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit"><i class="icon-search-stroke"></i></button><input type="hidden" name="sitesearch" value="http://localhost:4000"></form>
+
+        
+        
+        
+        
+
+        
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Explanations"><span class="toc-number">1.</span> <span class="toc-text">Explanations:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Solve-Approach"><span class="toc-number">2.</span> <span class="toc-text">Solve Approach:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pseudocode-for-programming-O-N-Time-Complexity"><span class="toc-number">3.</span> <span class="toc-text">Pseudocode for programming ( O(N) Time Complexity )</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mathematical-Solution-O-1-Time-Complexity"><span class="toc-number">4.</span> <span class="toc-text">Mathematical Solution ( O(1) Time Complexity )</span></a></li></ol>
+        
+    </div>
+</aside>
+
+</header>
+
+        <div id="content" class="content"><article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            How many regions do N lines divide the plane?
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="/2018/01/29/How-many-regions-do-N-lines-divide-the-plane/">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-01-29T17:14:15.000Z" itemprop="datePublished">2018-01-29</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Plane-Paper/">Plane Paper</a>, <a class="article-tag-link" href="/tags/Recurrent-Problem/">Recurrent Problem</a>, <a class="article-tag-link" href="/tags/Recursion/">Recursion</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h3 id="Explanations"><a href="#Explanations" class="headerlink" title="Explanations:"></a>Explanations:</h3><p><strong>N</strong> straight lines are drawn on a plane paper. Each line intersects with rest all lines. That means <strong>N</strong>‘th line intersects <strong>N-1</strong> lines. You can assume infinite number of lines can be drawn on that paper. You have to find total regions after <strong>N</strong> lines are drawn. An image is given below to understand the problem clearly.<br><a id="more"></a></p>
+<center> <img src="\img\Lines in plane..jpg" alt="The Tower of Hanoi"> </center>
+
+<h3 id="Solve-Approach"><a href="#Solve-Approach" class="headerlink" title="Solve Approach:"></a>Solve Approach:</h3><p>From above picture we see that base case L[0] = 1 (here, L = Lines). Whenever a line is drawn it intersects all other lines. Lets try to find the pattern from the picture. L[1] = 2, When 1st line is drawn it intersects 0 line. So, L[1] =  1+L[0] = 1. When 2’th line is drawn it intersects 1 lines. So, L[2] = 2+L[1] . Because when intersecting 1 line it creates 2 new regions. You can see for yourself by drawing on text paper. Again, when 3rd line is drawn it intersects 2 lines and creates 3 new regions. Thus, L[3] = 3+L[2].<br>From observation we see that, when N’th line is drawn and it intersects N-1 lines and creates N new regions. The total regions become new regions + old regions. So, for N lines, L[n] = N+L[n-1]. To know answer of L[n] we need to know L[n-1], To know L[n-1] we need to know L[n-2]….and in ending stage L[0]. Thus, we can say that recurrent solution exists for this problem.</p>
+<p>Lets build a tree for 4 lines.</p>
+<pre>
+<center> L[4] </center>
+<center> | </center>
+<center> L[3]+4 </center>
+<center> |    </center>
+<center> L[2]+3     </center>
+<center> |       </center>
+<center> L[1]+2       </center>
+<center> |          </center>
+<center> L[0]+1           </center>
+<center> |              </center>
+<center> 1              </center>
+</pre>
+
+<p>To calculate L[4], we need to go step by step from bottom to top from above tree.</p>
+<h3 id="Pseudocode-for-programming-O-N-Time-Complexity"><a href="#Pseudocode-for-programming-O-N-Time-Complexity" class="headerlink" title="Pseudocode for programming ( O(N) Time Complexity )"></a>Pseudocode for programming ( O(N) Time Complexity )</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">def TotalRegions( N ):</span><br><span class="line">      if N==0: return 1</span><br><span class="line">return TotalRegions(N-1)+N</span><br></pre></td></tr></table></figure>
+<h3 id="Mathematical-Solution-O-1-Time-Complexity"><a href="#Mathematical-Solution-O-1-Time-Complexity" class="headerlink" title="Mathematical Solution ( O(1) Time Complexity )"></a>Mathematical Solution ( O(1) Time Complexity )</h3><p>We know from above discussions,</p>
+<pre>
+     L[n] = L[n-1]+n
+=>        = L[n-2]+(n-1)+n
+=>        = L[n-3]+(n-2)+(n-1)+n
+=>        = L[n-4]+(n-3)+(n-2)+(n-1)+n
+......................................
+......................................
+......................................
+......................................
+=>        = L(n-n)+(n-(n-1))+..........+(n-4)+(n-3)+(n-2)+(n-1)+n
+=>        = L[0]+1+2+3+4+..........+n    ; Observing carefully on previous line will help you to understand how this(current line) came. 
+=>        = 1 + n*(n+1)/2                ; we know summation of 1 to n numbers is (n+1)/2\
+=>        = 1 + S(n)                     ; where, S(n) = n*(n+1)/2 = 1+2+3+4+..........+n
+</pre>
+
+<p>So, finding 1 + S(n) will let us know the total regions after drawn n lines in a plane.</p>
+
+        
+    </section>
+</article>
+
+
+
+<div class="comments">
+    <div id="disqus_thread">
+        <p class="comment-tips">WhatsUP</p>
+    </div>
+    <script>
+    window.disqus_config = function () {
+        this.language = 'en';
+        this.page.url = 'http://localhost:4000/2018/01/29/How-many-regions-do-N-lines-divide-the-plane/';
+        this.page.title = 'How many regions do N lines divide the plane?';
+        this.page.identifier = '2018/01/29/How-many-regions-do-N-lines-divide-the-plane/';
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = 'https://adnatull-github-io.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+
+</div>
+        <footer class="footer">
+    Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, Theme by <a href="https://github.com/sanonz/hexo-theme-concise" target="_blank">Concise</a>
+</footer>
+
+
+    </div>
+
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/1.9.0/jquery.min.js"></script>
+    
+    <script type="text/javascript" src="/js/scrollspy.min.js"></script>
+    
+    <script type="text/javascript">
+        $(function() {
+            var nodes = {
+                nav: $('#nav'),
+                aside: $('#aside'),
+                navTags: $('#nav-tags')
+            };
+
+            $('#open-panel, #aside-mask').on('click', function() {
+                nodes.aside.toggleClass('panel-show');
+            });
+            $('#nav-tag').on('click', function(event) {
+                event.preventDefault();console.log(nodes.navTags.attr('class'))
+                nodes.navTags.toggleClass('tag-show');console.log(nodes.navTags.attr('class'))
+            })/*.hover(function() {
+                nodes.navTags.addClass('tag-show');
+            }, function() {
+                nodes.navTags.removeClass('tag-show');
+            });*/
+
+            
+            $(document.body).scrollspy({target: '#aside-inner'});
+            
+        });
+    </script>
+
+</body>
+</html>
