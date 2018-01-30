@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+    
+    <entry>
+      <title><![CDATA[How many regions do N lines divide a plane?]]></title>
+      <url>/2018/01/29/How-many-regions-do-N-lines-divide-the-plane/</url>
+      <content type="html"><![CDATA[<h3 id="Explanations"><a href="#Explanations" class="headerlink" title="Explanations:"></a>Explanations:</h3><p><strong>N</strong> straight lines are drawn on a plane paper. Each line intersects with rest all lines. That means <strong>N</strong>‘th line intersects <strong>N-1</strong> lines. You can assume infinite number of lines can be drawn on that paper. You have to find total regions after <strong>N</strong> lines are drawn. An image is given below to understand the problem clearly.<br><a id="more"></a> </p>
+<center> <img src="\img\Lines in plane..jpg" alt="The Tower of Hanoi"> </center>
+
+<h3 id="Solve-Approach"><a href="#Solve-Approach" class="headerlink" title="Solve Approach:"></a>Solve Approach:</h3><p>From above picture we see that base case L[0] = 1 (here, L = Lines). Whenever a line is drawn it intersects all other lines. Lets try to find the pattern from the picture. L[1] = 2, When 1st line is drawn it intersects 0 line. So, L[1] =  1+L[0] = 1. When 2’th line is drawn it intersects 1 lines. So, L[2] = 2+L[1] . Because when intersecting 1 line it creates 2 new regions. You can see for yourself by drawing on text paper. Again, when 3rd line is drawn it intersects 2 lines and creates 3 new regions. Thus, L[3] = 3+L[2].<br>From observation we see that, when N’th line is drawn and it intersects N-1 lines and creates N new regions. The total regions become new regions + old regions. So, for N lines, L[n] = N+L[n-1]. To know answer of L[n] we need to know L[n-1], To know L[n-1] we need to know L[n-2]….and in ending stage L[0]. Thus, we can say that recurrent solution exists for this problem.</p>
+<p>Lets build a tree for 4 lines.</p>
+<pre>
+<center> L[4] </center>
+<center> | </center>
+<center> L[3]+4 </center>
+<center> |    </center>
+<center> L[2]+3     </center>
+<center> |       </center>
+<center> L[1]+2       </center>
+<center> |          </center>
+<center> L[0]+1           </center>
+<center> |              </center>
+<center> 1              </center>
+</pre>
+
+<p>To calculate L[4], we need to go step by step from bottom to top from above tree.</p>
+<h3 id="Pseudocode-for-programming-O-N-Time-Complexity"><a href="#Pseudocode-for-programming-O-N-Time-Complexity" class="headerlink" title="Pseudocode for programming ( O(N) Time Complexity )"></a>Pseudocode for programming ( O(N) Time Complexity )</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">def TotalRegions( N ):</span><br><span class="line">      if N==0: return 1</span><br><span class="line">return TotalRegions(N-1)+N</span><br></pre></td></tr></table></figure>
+<h3 id="Mathematical-Solution-O-1-Time-Complexity"><a href="#Mathematical-Solution-O-1-Time-Complexity" class="headerlink" title="Mathematical Solution ( O(1) Time Complexity )"></a>Mathematical Solution ( O(1) Time Complexity )</h3><p>We know from above discussions,</p>
+<pre>
+     L[n] = L[n-1]+n
+=>        = L[n-2]+(n-1)+n
+=>        = L[n-3]+(n-2)+(n-1)+n
+=>        = L[n-4]+(n-3)+(n-2)+(n-1)+n
+......................................
+......................................
+......................................
+......................................
+=>        = L(n-n)+(n-(n-1))+..........+(n-4)+(n-3)+(n-2)+(n-1)+n
+=>        = L[0]+1+2+3+4+..........+n    ; Observing carefully the previous line will help you to understand how this(current line) came.
+=>        = 1 + n*(n+1)/2                ; we know summation of 1 to n numbers is (n+1)/2\
+=>        = 1 + S(n)                     ; where, S(n) = n*(n+1)/2 = 1+2+3+4+..........+n
+</pre>
+
+<p>So, finding 1 + S(n) will let us know the total regions after drawn n lines in a plane.</p>
+]]></content>
+      
+        <categories>
+            
+            <category> Mathematics </category>
+            
+            <category> Concrete Mathematics </category>
+            
+            <category> Recurrent Problems </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> Recursion </tag>
+            
+            <tag> Recurrent Problem </tag>
+            
+            <tag> Plane Paper </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[The Tower of Hanoi Solution]]></title>
+      <url>/2018/01/29/The-Tower-of-Hanoi-Problem/</url>
+      <content type="html"><![CDATA[<h3 id="Definition"><a href="#Definition" class="headerlink" title="Definition:"></a>Definition:</h3><p>The Tower of Hanoi problem is a puzzle which can be solved by mathematically and can be implemented in programming code as well. The tower is also called <strong>Tower of Brahma</strong> or <strong>Lucas’ Tower</strong>. In this, game there are three pegs and one one of them hold <strong>n</strong> disks. <strong>n</strong> disks are ordered from higher radius to lower radius from the bottom to top.<br><a id="more"></a></p>
+<center> <img src="\img\Hanoi_10Ring.jpg" alt="The Tower of Hanoi"> </center><br><center> Illustration of the tower of Hanoi </center>
+
+<h3 id="Objective"><a href="#Objective" class="headerlink" title="Objective:"></a>Objective:</h3><p>The <em>objective</em> is to <em>move all the disks to to another peg</em> , <strong>Calculate minimum number of moves needed</strong> &amp; <strong>stats of three pegs after specific number of moves</strong>. But following conditions have to be fulfilled.</p>
+<ul>
+<li>Single disk can be moved at a time. No concurrency.</li>
+<li>Upper disk has to be moved from one peg to another.</li>
+<li>A disk of higher radius can not be placed on a disk of lower radius.</li>
+</ul>
+<p>Following image explains the conditions-</p>
+<center> <img src="\img\tower_of_hanoi.gif" alt="The Tower of Hanoi"> </center><br><p align="center"><font size="-4">The gif is collected from tutorialspoint.com</font> </p><br><center> </center>
+
+
+<h3 id="Minimum-Moves-Needed-to-Finish-the-Game-Recursive-Solutions"><a href="#Minimum-Moves-Needed-to-Finish-the-Game-Recursive-Solutions" class="headerlink" title="Minimum Moves Needed to Finish the Game (Recursive Solutions)"></a>Minimum Moves Needed to Finish the Game (Recursive Solutions)</h3><h4 id="Thinking-Approach"><a href="#Thinking-Approach" class="headerlink" title="Thinking Approach"></a>Thinking Approach</h4><p>For ease of remembering, lets think disks are numbered <strong>1</strong> to <strong>n</strong> from top to bottom. Now we will explore the puzzle in reverse way. We think first to move <strong>n</strong>‘th disk from first peg to third peg. But before that we need to move <strong>n-1</strong> disks to second peg. Upon completion of moving <strong>n-1</strong> disks to second we we will move <strong>n</strong>‘th disk from first peg to  third peg and then move <strong>n-1</strong> disks from second peg to third peg.</p>
+<p>So, to finish shifting all disks, move orders become -<br><strong>move n disks from first peg to third pegs</strong> = <strong>Move (n-1) disks from first peg to second peg</strong> + <strong>move n’th disk from first peg to third peg</strong> + <strong>Move (n-1) disks from second pegs to third peg</strong>.</p>
+<p>Equation,<br>T(n) = T(n-1)+1+T(n-1)</p>
+<p> Now to move <strong>n-1</strong> disks from first peg to second pegs, initially we need to move <strong>n-2</strong> disks from first pegs to third pegs then bring <strong>n-1</strong>‘th disk from first peg to second peg. Then again move <strong>n-2</strong> disks from first pegs from third peg to second pegs. So, move orders become -<br> <strong>move n-1 disks from first peg to second peg</strong> =  <strong>move n-2 disks from first peg to third peg</strong> + <strong>move n-1’th disk from first peg to second peg</strong> + <strong>move n-2 disks from third peg to second peg</strong>.</p>
+<p>Equation,<br>T(n-1) = T(n-2)+1+T(n-2)</p>
+<p>Now will find the solution for T(n-2), T(n-3), T(n-4) ……. T(0). T(0) = 0, as we know that one disk require one move. So, rest equations will be-<br>T(n-2) = T(n-3)+1+T(n-3)<br>T(n-3) = T(n-4)+1+T(n-4)<br>……………………………………..<br>……………………………………..<br>……………………………………..<br>T(1) = T(0)+1+T(0)<br>T(0)=0</p>
+<p>Lets think there are 4 disks. Now I will show a tree to solve the problem for T(4);</p>
+<pre>
+<center>T(4)</center>
+<center>|</center>
+<center>T(3)+1+T(3)</center>
+<center> /           \ </center>
+<center> T(2)+1+T(2)                    T(2)+1+T(2) </center>
+<center> /           \                   /           \</center>
+<center>T(1)+1+T(1)         T(1)+1+T(1)  T(1)+1+T(1)        T(1)+1+T(1)</center>
+</pre>
+
+<p>From above tree we see that the solution of T(n) depends on T(n-1) and T(n-1) depends on T(n-2) and so on until  base case T(0)=0 comes. If we know solution of 0 disk we can find the solution of any number of disks as long as there are three pegs only.</p>
+<h4 id="Pseudocode-for-Programming-O-2-n-Time-Complexity"><a href="#Pseudocode-for-Programming-O-2-n-Time-Complexity" class="headerlink" title="Pseudocode for Programming ( O(2^n) Time Complexity)"></a>Pseudocode for Programming ( O(2^n) Time Complexity)</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">def TotalMoves(N):</span><br><span class="line">  if N == 0: return 0</span><br><span class="line">  return TotalMoves(N-1)+1+TotalMoves(N-1)</span><br></pre></td></tr></table></figure>
+<p>We can optimize above pseudocode for better time complexity. We do not need to call <strong>TotalMoves(N-1)</strong> twice. Rather we can just write <strong>2*TotalMoves(N-1)</strong> there. Pseudocode will become -<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">def TotalMoves(N):</span><br><span class="line">  if N == 0: return 0</span><br><span class="line">  return 2*TotalMoves(N-1)+1</span><br></pre></td></tr></table></figure></p>
+<p>The time complexity of above code is O(2^n). We can bring it to linear time by doing some math. See below for linear solution.</p>
+<h4 id="Mathematical-Solution-O-1-Time-Complexity"><a href="#Mathematical-Solution-O-1-Time-Complexity" class="headerlink" title="Mathematical Solution ( O(1) Time Complexity )"></a>Mathematical Solution ( O(1) Time Complexity )</h4><p>From above discussions of recursive solution of The Tower of Hanoi, we can write the recurrence relation. The relation is -<br><strong>T(n)=2*T(n-1)+1</strong></p>
+<pre>
+we know, T[0] = 0
+
+Let, U[n] = T[n]+1
+So,  U[0] = T[0]+1
+=>        = 1
+
+Now, U[n] = T[n]+1
+=>        = (2*T[n-1]+1)+1  ; From equation, we know T[n] = 2*T[n-1]+1
+=>        = 2*T[n-1]+2
+=>        = 2*(T[n-1]+1)
+=>        = 2*U[n-1]
+=>        = 2*2*U[n-2]
+=>        = 2*2*2*U[n-3]
+    ...................   
+    ...................
+    ...................
+=>        = 2*2*2*...2*1
+=>   U[n] = 2^n  ; At finishing stage total number of 2 will be n.
+=>   T[n]+1 = 2^n
+=>   T[n] = 2^n-1
+</pre>
+
+<p><strong>T[n] = 2^n-1</strong> is the equation to count minimum moves need to finish the Tower of Hanoi game. Note, if we know the mathematical equation of The tower of Hanoi problem then we can find the solution in linear time.</p>
+]]></content>
+      
+        <categories>
+            
+            <category> Mathematics </category>
+            
+            <category> Concrete Mathematics </category>
+            
+            <category> Recurrent Problems </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> Recursion </tag>
+            
+            <tag> Recurrent Problem </tag>
+            
+            <tag> Mathematical Puzzle </tag>
+            
+            <tag> Puzzle </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[UVA 11879 - Multiple of 17]]></title>
+      <url>/2018/01/29/UVA-11879-Multiple-of-17/</url>
+      <content type="html"><![CDATA[<h3 id="11879-Multiple-of-17"><a href="#11879-Multiple-of-17" class="headerlink" title="11879 - Multiple of 17"></a>11879 - Multiple of 17</h3><p>Problem Link: <a href="https://uva.onlinejudge.org/external/118/11879.pdf" target="_blank" rel="noopener">https://uva.onlinejudge.org/external/118/11879.pdf</a></p>
+<p>Algorithm: This problem is quite easy. In this, there will be a number which is greater at most 100 digits. So, Its not possible to store it in “long long int” in c++.<br><a id="more"></a><br>We will write a program which will take input a string. If the string contains only 0 then the program will be break, otherwise it will enter in another loop. Before entering I will declare two integer variables ‘reminder’ and ‘i’. I will initialize the reminder variable to 0;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">char s[110];</span><br><span class="line">while(scanf(&quot;%s&quot;,s))&#123;</span><br><span class="line"> if(strcmp(s,&quot;0&quot;)==0)</span><br><span class="line">   break;</span><br><span class="line"> int i, reminder=0;</span><br><span class="line">               //code goes here</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure>
+<p>Then there will be loop which will start from the beginning of string to the end. It will be look like-</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">for(i=0;s[i]!=&apos;\0&apos;;i++)&#123;</span><br><span class="line">   //code goes here</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Now I will multiply the reminder by 10 and sum it with the current digit of the string(due to string case you need to subtract 48 from the current character and it will be count as digit in integer). again I will find the reminder of the previous reminder diving by 17 and will store it in reminder variable. This process continues until the loop ends.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">reminder=reminder*10+(s[i]-48);</span><br><span class="line">reminder=reminder%17;</span><br></pre></td></tr></table></figure>
+<p>After the loop ends my program will check whether the reminder variable is zero or not. If it is zero that means the big number(string) is multiple of 17 else it not.</p>
+<p>if it is multiple of 17 then my program will print 1 , if this is not multiple of 17 then the program will print 0.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">if(reminder==0)</span><br><span class="line">     printf(&quot;1\n&quot;);</span><br><span class="line">   else</span><br><span class="line">     printf(&quot;0\n&quot;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>Now all the steps are done. Now lets combine all the codes in one place.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">//Problem Link: https://uva.onlinejudge.org/external/118/11879.pdf</span><br><span class="line">//Code Begins</span><br><span class="line">//RUNTIME: 0.00s</span><br><span class="line">#include&lt;cstdio&gt;</span><br><span class="line">#include&lt;cstring&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">int main()&#123;</span><br><span class="line"> char s[110];</span><br><span class="line"> while(scanf(&quot;%s&quot;,s))&#123;</span><br><span class="line">   if(strcmp(s,&quot;0&quot;)==0)</span><br><span class="line">     break;</span><br><span class="line">   int reminder=0;</span><br><span class="line">   for(int i=0;s[i]!=&apos;\0&apos;;i++)&#123;</span><br><span class="line">       reminder=reminder*10+(s[i]-48);</span><br><span class="line">       reminder=reminder%17;</span><br><span class="line">     &#125;</span><br><span class="line">   if(reminder==0)</span><br><span class="line">     printf(&quot;1\n&quot;);</span><br><span class="line">   else</span><br><span class="line">     printf(&quot;0\n&quot;);</span><br><span class="line">   &#125;</span><br><span class="line"> return 0;</span><br><span class="line">&#125;</span><br><span class="line">//Code Ends</span><br></pre></td></tr></table></figure>
+]]></content>
+      
+        <categories>
+            
+            <category> Competitive Programming </category>
+            
+            <category> UVA Online judge </category>
+            
+            <category> Mathematics </category>
+            
+            <category> BigInteger </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> UVA Online judge </tag>
+            
+            <tag> Number Theory </tag>
+            
+            <tag> Modulus </tag>
+            
+            <tag> Biginteger </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[UVA 11876 - N + NOD (N)]]></title>
+      <url>/2018/01/29/UVA-11876-N-NOD-N/</url>
+      <content type="html"><![CDATA[<h3 id="Description"><a href="#Description" class="headerlink" title="Description:"></a>Description:</h3><p>For a number N, first have to calculate N-1+divisors(N-1) &amp; store it in array (e.g. arr[i]=arr[i-1]+divisors(arr[i-1])).<br>Make a sequence from 1 to until arr[i] becomes greater than 1000000. Then you will be given two numbers A &amp; B, and you will have to find the number of integers from the above sequence which lies within the range [A,B].</p>
+<p>Hints = No critical case. Easy problem.<br><a id="more"></a> </p>
+<h3 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm:"></a>Algorithm:</h3><p>Step 1:<br>First find the prime numbers from 1 to 1000000 and store them in an array (was not sure about the range, thats why I calculated till 1000000) .<br>Step 2:<br>Calculate number of divisors for each numbers from 1 to 1000000 and store divisors in each array. (e.g. divisors of 6 are 1,2,3,6. Total 4 divisors. So divisor[6]=4. )<br>Step 3: To find the divisors of each number, I took help of prime numbers. There is a good tutorial in lightoj.com to find divisors using primes. Link is give below:<br><a href="http://lightoj.com/article_show.php?article=1003" target="_blank" rel="noopener">http://lightoj.com/article_show.php?article=1003</a></p>
+<p>To decrease time complexity,<br>I used here some tricks. First one is, when finding the number of divisors of a value, I checked if it is a prime or not. If the number is a prime then the divisors of that number is 2. Because prime numbers are divisible by 1 and the number it self only.<br>If the given number is not prime then I again checked if it is a co-prime. Because we know divisors of co-prime is 3 and they are 1, square root of that number(must be integer value, no fraction) and the number it self. So divisors of co-prime is 3.<br>If the number doesn’t meet the requirement of being prime, co-prime then I followed the algorithm I mentioned at the beginning of this step.<br>Number of divisors for 1 t0 5. divisor[1]=1, divisor[2]=2, divisor[3]=2, divisor[4]=3, divisor[5]=2, divisor[6]=4.</p>
+<p>Step 4: So, I know the number of divisors of values from 1 to 1000000. Now I will calculate the sequence as described in problem description and will store it in a new array (e.g. num[2]=1+divisor[1], so, num[2] = 2, and num[3]=2+divisor[2], so, num[3] = 4).</p>
+<p>Step 5: I will take the input as description. For given A &amp; B, I will do binary search here to find lower bound of A and upper bound of B from num array. (the array which I used to store the sequence of numbers from 1 to 1000000) as problem description.<br>Step 6: Now I will subtract lower bound from upper bound and will save it in a new variable and again I will subtract 1 from this variable and will print this according to instruction. Why I did subtract 1? To understand this I think you need to know how lower bound and upper bound of binary search works!</p>
+<p>I am enclosing the code here. Try not to see my code and try your own. Thanks</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;iostream&gt;</span><br><span class="line">#include&lt;algorithm&gt;</span><br><span class="line">#include&lt;cstdio&gt;</span><br><span class="line">#include&lt;cmath&gt;</span><br><span class="line">#define LL long long</span><br><span class="line">#define L long</span><br><span class="line">using namespace std;</span><br><span class="line">L prime[1234567], mark[12345678],m;</span><br><span class="line">void pr () &#123;</span><br><span class="line">    m=0;</span><br><span class="line">    for (int i=4; i&lt;12345678;i+=2)</span><br><span class="line">        mark[i]=1;</span><br><span class="line">    int N=sqrt(12345678)+1;</span><br><span class="line">    for (int i=3;i&lt;N;i+=2) &#123;</span><br><span class="line">        if (!mark[i]) &#123;</span><br><span class="line">            for (int j=i*i;j&lt;12345678;j=j+i*2) &#123;</span><br><span class="line">                mark[j]=1;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    for (int i=2;i&lt;12345678;i++) &#123;</span><br><span class="line">        if(!mark[i])</span><br><span class="line">            prime[m++]=i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">bool checkprime( L a ) &#123;</span><br><span class="line">    L left = 0, right = m-1, mid;</span><br><span class="line">    while ( left&lt;=right ) &#123;</span><br><span class="line">        mid = (left+right)/2;</span><br><span class="line">        if(prime[mid]==a)</span><br><span class="line">            return true;</span><br><span class="line">        else if (prime[mid]&gt;a)</span><br><span class="line">            right = mid-1;</span><br><span class="line">        else</span><br><span class="line">            left = mid + 1;</span><br><span class="line">    &#125;</span><br><span class="line">    return false;</span><br><span class="line">&#125;</span><br><span class="line">bool chcekcoprime(L a)&#123;</span><br><span class="line">    L x = sqrt(a);</span><br><span class="line">    if(checkprime(x) &amp;&amp; x*x==a)</span><br><span class="line">        return true;</span><br><span class="line">    else return false;</span><br><span class="line">&#125;</span><br><span class="line">L num[1234567],di[1234567];</span><br><span class="line">void divisors () &#123;</span><br><span class="line">    L c=2,d,e,f,g;</span><br><span class="line">    di[1]=1;</span><br><span class="line">    for (L i=2;i&lt;1234567;i++)&#123;</span><br><span class="line">        d = sqrt(i)+1;</span><br><span class="line">        c=1;</span><br><span class="line">        e=i;</span><br><span class="line">        f=1;</span><br><span class="line">        if(checkprime(i))</span><br><span class="line">            c=2;</span><br><span class="line">        else if (chcekcoprime(i))</span><br><span class="line">            c=3;</span><br><span class="line">        else&#123;</span><br><span class="line">            for (L j=0;prime[j]*prime[j]&lt;=e;j++)&#123;</span><br><span class="line">                 f=0;</span><br><span class="line">                while(e%prime[j]==0)&#123;</span><br><span class="line">                   f++;</span><br><span class="line">                    e=e/prime[j];</span><br><span class="line">                &#125;</span><br><span class="line">                c*=(f+1);</span><br><span class="line">            &#125;</span><br><span class="line">            if (e&gt;1) c*=2;</span><br><span class="line">        &#125;</span><br><span class="line">        di[i]=c;</span><br><span class="line">    &#125;</span><br><span class="line">    return ;</span><br><span class="line">&#125;</span><br><span class="line">void nu () &#123;</span><br><span class="line">    num[1]=1;</span><br><span class="line">    for (m=2;m&lt;1234567;m++) &#123;</span><br><span class="line">        num[m]=num[m-1]+di[num[m-1]];</span><br><span class="line">        if(num[m]&gt;1234567)</span><br><span class="line">            break;</span><br><span class="line">    &#125;</span><br><span class="line">    return;</span><br><span class="line">&#125;</span><br><span class="line">L lower (L a) &#123;</span><br><span class="line">    L left = 1, right = m, mid;</span><br><span class="line">    while (left&lt;=right) &#123;</span><br><span class="line">        mid = (left+right)/2;</span><br><span class="line">        if(num[mid]==a)&#123;</span><br><span class="line">            //cout &lt;&lt; mid &lt;&lt; endl;</span><br><span class="line">            right=mid-1;</span><br><span class="line">        &#125;</span><br><span class="line">        else if ( num[mid]&gt;a)</span><br><span class="line">            right = mid-1;</span><br><span class="line">        else</span><br><span class="line">            left = mid + 1;</span><br><span class="line">    &#125;</span><br><span class="line">    return right;</span><br><span class="line">&#125;</span><br><span class="line">L upper (L b) &#123;</span><br><span class="line">      L left = 1, right = m, mid;</span><br><span class="line">    while (left&lt;=right) &#123;</span><br><span class="line">        mid = (left+right)/2;</span><br><span class="line">      //  cout &lt;&lt; mid &lt;&lt; endl;</span><br><span class="line">        if(num[mid]==b)&#123;</span><br><span class="line">            left=mid+1;</span><br><span class="line">        &#125;</span><br><span class="line">        else if ( num[mid]&gt;b)</span><br><span class="line">            right = mid-1;</span><br><span class="line">        else</span><br><span class="line">            left = mid + 1;</span><br><span class="line">    &#125;</span><br><span class="line">    return left;</span><br><span class="line">&#125;</span><br><span class="line">int main() &#123;</span><br><span class="line"> //   freopen( &quot;in.txt&quot;,&quot;r&quot;,stdin );</span><br><span class="line">    pr ();</span><br><span class="line">    divisors();</span><br><span class="line">    nu();</span><br><span class="line">    int n;</span><br><span class="line">    L A,B;</span><br><span class="line">    scanf (&quot;%d&quot;,&amp;n);</span><br><span class="line">    for (int i=1;i&lt;=n;i++) &#123;</span><br><span class="line">        scanf (&quot;%ld %ld&quot;,&amp;A,&amp;B);</span><br><span class="line">        L lo=lower(A), up = upper (B);</span><br><span class="line">        printf (&quot;Case %d: %ld\n&quot;,i,up-lo-1);</span><br><span class="line">    &#125;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      
+        <categories>
+            
+            <category> Competitive Programming </category>
+            
+            <category> UVA Online judge </category>
+            
+            <category> Problem Solving Paradigms </category>
+            
+            <category> Mathematics </category>
+            
+            <category> Divide and Conquer </category>
+            
+            <category> Binary Search </category>
+            
+            <category> Number Theory </category>
+            
+            <category> Prime Numbers </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> UVA Online judge </tag>
+            
+            <tag> Number Theory </tag>
+            
+            <tag> Binary Search </tag>
+            
+            <tag> Prime Numbers </tag>
+            
+        </tags>
+        
+    </entry>
+    
+  
+  
+</search>
