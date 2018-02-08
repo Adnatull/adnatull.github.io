@@ -36,7 +36,7 @@ Induction Steps:
   So, Proved
 </pre>
 
-<h4 id="Method-3-k-2"><a href="#Method-3-k-2" class="headerlink" title="Method 3 (k=2)"></a>Method 3 (k=2)</h4><h3 id="Binary-Solution"><a href="#Binary-Solution" class="headerlink" title="Binary Solution"></a>Binary Solution</h3><p>Suppose, n = 10 then binary of 10 = 1010. Shifting the leftmost 1’s bit to Rightmost position makes 0101. The decimal of 0101 is 5, which is answer. So, shifting leftmost 1’s digit of a binary number to it’s rightmost position makes the winner number in Josephus problem.</p>
+<h4 id="Method-3-k-2"><a href="#Method-3-k-2" class="headerlink" title="Method 3 (k=2)"></a>Method 3 (k=2)</h4><h5 id="Binary-Solution"><a href="#Binary-Solution" class="headerlink" title="Binary Solution"></a>Binary Solution</h5><p>Suppose, n = 10 then binary of 10 = 1010. Shifting the leftmost 1’s bit to Rightmost position makes 0101. The decimal of 0101 is 5, which is answer. So, shifting leftmost 1’s digit of a binary number to it’s rightmost position makes the winner number in Josephus problem.</p>
 ]]></content>
       
         <categories>
