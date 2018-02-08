@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8" />
+
+    
+
+    
+
+    <title>The Josephus Problem | Adnatull&#39;s Blog</title>
+    <meta name="author" content="Adnatull Al Masum" />
+    <meta name="version" content="1.0.0" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="IntroductionThe Josephus Problem is a count-out game which is regarded as a theoretical problem in Computer Science or Mathematics. In this game, n people stand in a circle s is the starting number of people. s is holding a sword where s kills s+k-1‘" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+    <meta name="baidu-site-verification" content="F0CXvmUgA9" />
+
+    
+    
+    <link rel="icon" href="/logo.jpg">
+    
+
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+<body>
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="app">
+        <header class="header clearfix">
+    <div id="nav" class="nav">
+    <button id="open-panel" class="open-panel"><i class="icon-library"></i></button>
+
+    <nav class="nav-inner">
+
+        
+          
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+          
+        
+          
+            <li class="nav-item">
+                <a class="nav-link" href="/archives">All Posts</a>
+            </li>
+          
+        
+          
+            <li class="nav-item nav-item-tag">
+                <a id="nav-tag" class="nav-link" href="#">Tags</a>
+                <div id="nav-tags" class="nav-tag-wrap">
+                    <i class="nav-tag-arrow"></i>
+                    
+  <div class="widget-wrap">
+    <h3 class="widget-title">
+        <i class="icon-tag vm"></i>
+        <span class="vm">Tags</span>
+    </h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Biginteger/">Biginteger</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Binary-Search/">Binary Search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mathematical-Puzzle/">Mathematical Puzzle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mathematics/">Mathematics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Modulus/">Modulus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Number-Theory/">Number Theory</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Plane-Paper/">Plane Paper</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Prime-Numbers/">Prime Numbers</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Puzzle/">Puzzle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Recurrent-Problem/">Recurrent Problem</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Recursion/">Recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UVA-Online-judge/">UVA Online judge</a></li></ul>
+    </div>
+  </div>
+
+
+                </div>
+            </li>
+  
+          
+        
+
+
+    </nav>
+</div>
+
+    <aside id="aside" class="aside">
+    <div id="aside-mask" class="aside-mask"></div>
+    <div id="aside-inner" class="aside-inner">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit"><i class="icon-search-stroke"></i></button><input type="hidden" name="sitesearch" value="https://adnatull.github.io"></form>
+
+
+
+        
+        
+        
+        
+
+        
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Introduction"><span class="toc-number">1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Solutions"><span class="toc-number">2.</span> <span class="toc-text">Solutions</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Simulation-When-k-2-amp-s-1"><span class="toc-number">2.1.</span> <span class="toc-text">Simulation ( When k=2 &amp; s = 1)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Method-1-when-k-2"><span class="toc-number">2.2.</span> <span class="toc-text">Method 1 (when k=2)</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Solution-by-Simulations"><span class="toc-number">2.2.1.</span> <span class="toc-text">Solution by Simulations</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Pseudocode"><span class="toc-number">2.2.2.</span> <span class="toc-text">Pseudocode</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Method-2-k-2"><span class="toc-number">2.3.</span> <span class="toc-text">Method 2 (k=2)</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Proof-by-Induction"><span class="toc-number">2.3.1.</span> <span class="toc-text">Proof by Induction</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Method-3-k-2"><span class="toc-number">2.4.</span> <span class="toc-text">Method 3 (k=2)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Binary-Solution"><span class="toc-number">3.</span> <span class="toc-text">Binary Solution</span></a></li></ol>
+        
+    </div>
+</aside>
+
+</header>
+
+        <div id="content" class="content"><article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            The Josephus Problem
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="/2018/02/08/The-Josephus-Problem/">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2018-02-08T17:08:50.000Z" itemprop="datePublished">2018-02-08</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/Mathematics/">Mathematics</a>, <a class="article-tag-link" href="/tags/Recurrent-Problem/">Recurrent Problem</a>, <a class="article-tag-link" href="/tags/Recursion/">Recursion</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><p>The <strong>Josephus Problem</strong> is a count-out game which is regarded as a theoretical problem in Computer Science or Mathematics. In this game, <strong>n</strong> people stand in a circle <strong>s</strong> is the starting number of people. <strong>s</strong> is holding a sword where <strong>s</strong> kills <strong>s+k-1</strong>‘th people from his position and gives his sword to <strong>s+k</strong>‘th people. Thus <strong>s+k</strong> becomes new <strong>s</strong>.<a id="more"></a> Going in the same direction this procedure is repeated until one person is left. Remaining one person is marked as a winner.<br>The gif below explains the procedure. Here n = 12, k = 3 &amp; s = 1.</p>
+<p><center> <img src="\img\What is Josephus.gif" alt="What is Josephus Problem"> </center><br>To know history of Josephus Problem you can read the wiki page.</p>
+<h3 id="Solutions"><a href="#Solutions" class="headerlink" title="Solutions"></a>Solutions</h3><h4 id="Simulation-When-k-2-amp-s-1"><a href="#Simulation-When-k-2-amp-s-1" class="headerlink" title="Simulation ( When k=2 &amp; s = 1)"></a>Simulation ( When k=2 &amp; s = 1)</h4><p>Look carefully below image.</p>
+<p><center> <img src="\img\Josephus_simulate.jpg" alt="Sample Simulation"> </center><br>I’ve manually sorted the solution for n = 1 to 10.</p>
+<h4 id="Method-1-when-k-2"><a href="#Method-1-when-k-2" class="headerlink" title="Method 1 (when k=2)"></a>Method 1 (when k=2)</h4><h5 id="Solution-by-Simulations"><a href="#Solution-by-Simulations" class="headerlink" title="Solution by Simulations"></a>Solution by Simulations</h5><p>If <strong>n</strong> is even then–<br>Now suppose n = 10, after first step the image becomes like  </p>
+<p><center> <img src="\img\Josephus\Step1..jpg" alt="Sample Simulation"> </center><br>The person holding the sword after first step is 2&ast;(n/2)-1. Let, x = n. For every choice of x   the position at the end of that stage will be 2&ast;(x/2)-1. You can see it from the above images. If x is even after that stage then this recursive procedure will continue. So, for <strong>2n</strong> people we can write J(2n) = 2J(n)-1.</p>
+<p>If total people is odd or there are <strong>2n+1</strong> people then–</p>
+<p><center> <img src="\img\Josephus\Odd.jpg" alt="Sample Simulation"> </center><br>At the end of the step 1, number 9 is holding the sword. So for 2n+1 we can write, J(2n+1) = 2J(n)+1.<br>So, Finally<br>          J(1) = 1<br>          J(2n) = 2J(n)-1  while n&gt;=1<br>          J(2n+1) = 2J(n)+1 while n&gt;=1</p>
+<h5 id="Pseudocode"><a href="#Pseudocode" class="headerlink" title="Pseudocode"></a>Pseudocode</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">def Josephus(n):</span><br><span class="line">    if n==1: return 1</span><br><span class="line"></span><br><span class="line">    if n is even return 2*J(n/2)-1</span><br><span class="line">    return 2*J(n/2)+1</span><br></pre></td></tr></table></figure>
+<h4 id="Method-2-k-2"><a href="#Method-2-k-2" class="headerlink" title="Method 2 (k=2)"></a>Method 2 (k=2)</h4><h5 id="Proof-by-Induction"><a href="#Proof-by-Induction" class="headerlink" title="Proof by Induction"></a>Proof by Induction</h5><p>J(2^m +L) = 2L+1</p>
+<pre>
+Base Case: J(1) = 1
+
+Induction Steps:
+  Case 1: (L is even)
+        J(2^m +L) = 2J(2^(m-1) + (L/2) ) - 1
+                  = 2 (2L/2 + 1 ) -1
+                  = 2L+1
+
+  Case 2: (L is odd)
+        J(2^m +L)
+        let, 2^m +L = 2K+1
+        K = (2^m + L-1)/2
+          = 2^(m-1) + (L-1)/2
+        J(2^m+L) = 2J(2^(m-1) + (L-1)/2 ) +1
+                 = 2 [2(L-1)/2 + 1 ] +1
+                 = 2 [ L-1+1] + 1
+                 = 2L+1
+  So, Proved
+</pre>
+
+<h4 id="Method-3-k-2"><a href="#Method-3-k-2" class="headerlink" title="Method 3 (k=2)"></a>Method 3 (k=2)</h4><h3 id="Binary-Solution"><a href="#Binary-Solution" class="headerlink" title="Binary Solution"></a>Binary Solution</h3><p>Suppose, n = 10 then binary of 10 = 1010. Shifting the leftmost 1’s bit to Rightmost position makes 0101. The decimal of 0101 is 5, which is answer. So, shifting leftmost 1’s digit of a binary number to it’s rightmost position makes the winner number in Josephus problem.</p>
+
+        
+    </section>
+</article>
+
+
+
+<div class="comments">
+    <div id="disqus_thread">
+        <p class="comment-tips">WhatsUP</p>
+    </div>
+    <script>
+    window.disqus_config = function () {
+        this.language = 'en';
+        this.page.url = 'https://adnatull.github.io/2018/02/08/The-Josephus-Problem/';
+        this.page.title = 'The Josephus Problem';
+        this.page.identifier = '2018/02/08/The-Josephus-Problem/';
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = 'https://adnatull-github-io.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+
+</div>
+        <footer class="footer">
+    Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, Theme by <a href="https://github.com/sanonz/hexo-theme-concise" target="_blank">Concise</a>
+</footer>
+
+
+    </div>
+
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/1.9.0/jquery.min.js"></script>
+    
+    <script type="text/javascript" src="/js/scrollspy.min.js"></script>
+    
+    <script type="text/javascript">
+        $(function() {
+            var nodes = {
+                nav: $('#nav'),
+                aside: $('#aside'),
+                navTags: $('#nav-tags')
+            };
+
+            $('#open-panel, #aside-mask').on('click', function() {
+                nodes.aside.toggleClass('panel-show');
+            });
+            $('#nav-tag').on('click', function(event) {
+                event.preventDefault();console.log(nodes.navTags.attr('class'))
+                nodes.navTags.toggleClass('tag-show');console.log(nodes.navTags.attr('class'))
+            })/*.hover(function() {
+                nodes.navTags.addClass('tag-show');
+            }, function() {
+                nodes.navTags.removeClass('tag-show');
+            });*/
+
+            
+            $(document.body).scrollspy({target: '#aside-inner'});
+            
+        });
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

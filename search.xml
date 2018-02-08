@@ -3,6 +3,66 @@
   
     
     <entry>
+      <title><![CDATA[The Josephus Problem]]></title>
+      <url>/2018/02/08/The-Josephus-Problem/</url>
+      <content type="html"><![CDATA[<h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><p>The <strong>Josephus Problem</strong> is a count-out game which is regarded as a theoretical problem in Computer Science or Mathematics. In this game, <strong>n</strong> people stand in a circle <strong>s</strong> is the starting number of people. <strong>s</strong> is holding a sword where <strong>s</strong> kills <strong>s+k-1</strong>‘th people from his position and gives his sword to <strong>s+k</strong>‘th people. Thus <strong>s+k</strong> becomes new <strong>s</strong>.<a id="more"></a> Going in the same direction this procedure is repeated until one person is left. Remaining one person is marked as a winner.<br>The gif below explains the procedure. Here n = 12, k = 3 &amp; s = 1.</p>
+<p><center> <img src="\img\What is Josephus.gif" alt="What is Josephus Problem"> </center><br>To know history of Josephus Problem you can read the wiki page.</p>
+<h3 id="Solutions"><a href="#Solutions" class="headerlink" title="Solutions"></a>Solutions</h3><h4 id="Simulation-When-k-2-amp-s-1"><a href="#Simulation-When-k-2-amp-s-1" class="headerlink" title="Simulation ( When k=2 &amp; s = 1)"></a>Simulation ( When k=2 &amp; s = 1)</h4><p>Look carefully below image.</p>
+<p><center> <img src="\img\Josephus_simulate.jpg" alt="Sample Simulation"> </center><br>I’ve manually sorted the solution for n = 1 to 10.</p>
+<h4 id="Method-1-when-k-2"><a href="#Method-1-when-k-2" class="headerlink" title="Method 1 (when k=2)"></a>Method 1 (when k=2)</h4><h5 id="Solution-by-Simulations"><a href="#Solution-by-Simulations" class="headerlink" title="Solution by Simulations"></a>Solution by Simulations</h5><p>If <strong>n</strong> is even then–<br>Now suppose n = 10, after first step the image becomes like  </p>
+<p><center> <img src="\img\Josephus\Step1..jpg" alt="Sample Simulation"> </center><br>The person holding the sword after first step is 2&ast;(n/2)-1. Let, x = n. For every choice of x   the position at the end of that stage will be 2&ast;(x/2)-1. You can see it from the above images. If x is even after that stage then this recursive procedure will continue. So, for <strong>2n</strong> people we can write J(2n) = 2J(n)-1.</p>
+<p>If total people is odd or there are <strong>2n+1</strong> people then–</p>
+<p><center> <img src="\img\Josephus\Odd.jpg" alt="Sample Simulation"> </center><br>At the end of the step 1, number 9 is holding the sword. So for 2n+1 we can write, J(2n+1) = 2J(n)+1.<br>So, Finally<br>          J(1) = 1<br>          J(2n) = 2J(n)-1  while n&gt;=1<br>          J(2n+1) = 2J(n)+1 while n&gt;=1</p>
+<h5 id="Pseudocode"><a href="#Pseudocode" class="headerlink" title="Pseudocode"></a>Pseudocode</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">def Josephus(n):</span><br><span class="line">    if n==1: return 1</span><br><span class="line"></span><br><span class="line">    if n is even return 2*J(n/2)-1</span><br><span class="line">    return 2*J(n/2)+1</span><br></pre></td></tr></table></figure>
+<h4 id="Method-2-k-2"><a href="#Method-2-k-2" class="headerlink" title="Method 2 (k=2)"></a>Method 2 (k=2)</h4><h5 id="Proof-by-Induction"><a href="#Proof-by-Induction" class="headerlink" title="Proof by Induction"></a>Proof by Induction</h5><p>J(2^m +L) = 2L+1</p>
+<pre>
+Base Case: J(1) = 1
+
+Induction Steps:
+  Case 1: (L is even)
+        J(2^m +L) = 2J(2^(m-1) + (L/2) ) - 1
+                  = 2 (2L/2 + 1 ) -1
+                  = 2L+1
+
+  Case 2: (L is odd)
+        J(2^m +L)
+        let, 2^m +L = 2K+1
+        K = (2^m + L-1)/2
+          = 2^(m-1) + (L-1)/2
+        J(2^m+L) = 2J(2^(m-1) + (L-1)/2 ) +1
+                 = 2 [2(L-1)/2 + 1 ] +1
+                 = 2 [ L-1+1] + 1
+                 = 2L+1
+  So, Proved
+</pre>
+
+<h4 id="Method-3-k-2"><a href="#Method-3-k-2" class="headerlink" title="Method 3 (k=2)"></a>Method 3 (k=2)</h4><h3 id="Binary-Solution"><a href="#Binary-Solution" class="headerlink" title="Binary Solution"></a>Binary Solution</h3><p>Suppose, n = 10 then binary of 10 = 1010. Shifting the leftmost 1’s bit to Rightmost position makes 0101. The decimal of 0101 is 5, which is answer. So, shifting leftmost 1’s digit of a binary number to it’s rightmost position makes the winner number in Josephus problem.</p>
+]]></content>
+      
+        <categories>
+            
+            <category> Mathematics </category>
+            
+            <category> Concrete Mathematics </category>
+            
+            <category> Recurrent Problems </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> Recursion </tag>
+            
+            <tag> Recurrent Problem </tag>
+            
+            <tag> Mathematics </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[How many regions do N lines divide a plane?]]></title>
       <url>/2018/01/29/How-many-regions-do-N-lines-divide-the-plane/</url>
       <content type="html"><![CDATA[<h3 id="Explanations"><a href="#Explanations" class="headerlink" title="Explanations:"></a>Explanations:</h3><p><strong>N</strong> straight lines are drawn on a plane paper. Each line intersects with rest all lines. That means <strong>N</strong>‘th line intersects <strong>N-1</strong> lines. You can assume infinite number of lines can be drawn on that paper. You have to find total regions after <strong>N</strong> lines are drawn. An image is given below to understand the problem clearly.<br><a id="more"></a> </p>
