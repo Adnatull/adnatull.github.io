@@ -57,7 +57,7 @@
         <span class="vm">Tags</span>
     </h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Biginteger/">Biginteger</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Binary-Search/">Binary Search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mathematical-Puzzle/">Mathematical Puzzle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mathematics/">Mathematics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Modulus/">Modulus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Number-Theory/">Number Theory</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Plane-Paper/">Plane Paper</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Prime-Numbers/">Prime Numbers</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Puzzle/">Puzzle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Recurrent-Problem/">Recurrent Problem</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Recursion/">Recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UVA-Online-judge/">UVA Online judge</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Binary-Search/">Binary Search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mathematics/">Mathematics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Number-Theory/">Number Theory</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Puzzle/">Puzzle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Recursion/">Recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UVA-Online-judge/">UVA Online judge</a></li></ul>
     </div>
   </div>
 
@@ -90,7 +90,6 @@
     </div>
 </aside>
 </header>
-
         <div id="content" class="content"><article class="article" itemscope itemprop="blogPost">
     
     <header class="article-header">
@@ -110,7 +109,7 @@
             
 <div class="article-tag-list">
     <i class="icon-tag"></i>
-    <a class="article-tag-link" href="/tags/Mathematics/">Mathematics</a>, <a class="article-tag-link" href="/tags/Recurrent-Problem/">Recurrent Problem</a>, <a class="article-tag-link" href="/tags/Recursion/">Recursion</a>
+    <a class="article-tag-link" href="/tags/Mathematics/">Mathematics</a>, <a class="article-tag-link" href="/tags/Recursion/">Recursion</a>
 </div>
 
 
@@ -123,11 +122,11 @@
 <p><center> <img src="\img\What is Josephus.gif" alt="What is Josephus Problem"> </center><br>To know history of Josephus Problem you can read the wiki page.</p>
 <h3 id="Solutions"><a href="#Solutions" class="headerlink" title="Solutions"></a>Solutions</h3><h4 id="Simulation-When-k-2-amp-s-1"><a href="#Simulation-When-k-2-amp-s-1" class="headerlink" title="Simulation ( When k=2 &amp; s = 1)"></a>Simulation ( When k=2 &amp; s = 1)</h4><p>Look carefully below image.</p>
 <p><center> <img src="\img\Josephus_simulate.jpg" alt="Sample Simulation"> </center><br>I’ve manually sorted the solution for n = 1 to 10.</p>
-<h4 id="Method-1-when-k-2"><a href="#Method-1-when-k-2" class="headerlink" title="Method 1 (when k=2)"></a>Method 1 (when k=2)</h4><h5 id="Solution-by-Simulations"><a href="#Solution-by-Simulations" class="headerlink" title="Solution by Simulations"></a>Solution by Simulations</h5><p>If <strong>n</strong> is even then–<br>Now suppose n = 10, after first step the image becomes like  </p>
+<h4 id="Method-1-when-k-2"><a href="#Method-1-when-k-2" class="headerlink" title="Method 1 (when k=2)"></a>Method 1 (when k=2)</h4><h5 id="Solution-by-Simulations"><a href="#Solution-by-Simulations" class="headerlink" title="Solution by Simulations"></a>Solution by Simulations</h5><p>If <strong>n</strong> is even then–<br>Now suppose n = 10, after first step the image becomes like</p>
 <p><center> <img src="\img\Josephus\Step1..jpg" alt="Sample Simulation"> </center><br>The person holding the sword after first step is 2&ast;(n/2)-1. Let, x = n. For every choice of x   the position at the end of that stage will be 2&ast;(x/2)-1. You can see it from the above images. If x is even after that stage then this recursive procedure will continue. So, for <strong>2n</strong> people we can write J(2n) = 2J(n)-1.</p>
 <p>If total people is odd or there are <strong>2n+1</strong> people then–</p>
 <p><center> <img src="\img\Josephus\Odd.jpg" alt="Sample Simulation"> </center><br>At the end of the step 1, number 9 is holding the sword. So for 2n+1 we can write, J(2n+1) = 2J(n)+1.<br>So, Finally<br>          J(1) = 1<br>          J(2n) = 2J(n)-1  while n&gt;=1<br>          J(2n+1) = 2J(n)+1 while n&gt;=1</p>
-<h5 id="Pseudocode"><a href="#Pseudocode" class="headerlink" title="Pseudocode"></a>Pseudocode</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">def Josephus(n):</span><br><span class="line">    if n==1: return 1</span><br><span class="line"></span><br><span class="line">    if n is even return 2*J(n/2)-1</span><br><span class="line">    return 2*J(n/2)+1</span><br></pre></td></tr></table></figure>
+<h5 id="Pseudocode"><a href="#Pseudocode" class="headerlink" title="Pseudocode"></a>Pseudocode</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">def Josephus(n):</span><br><span class="line">if n==1: return 1</span><br><span class="line"></span><br><span class="line">      if n is even return 2*J(n/2)-1</span><br><span class="line">      return 2*J(n/2)+1</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <h4 id="Method-2-k-2"><a href="#Method-2-k-2" class="headerlink" title="Method 2 (k=2)"></a>Method 2 (k=2)</h4><h5 id="Proof-by-Induction"><a href="#Proof-by-Induction" class="headerlink" title="Proof by Induction"></a>Proof by Induction</h5><p>J(2^m +L) = 2L+1</p>
 <pre>
 Base Case: J(1) = 1
