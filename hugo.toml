@@ -1,0 +1,65 @@
+baseURL = "https://adnatull.github.io/"
+languageCode = "en-us"
+title = "Adnatull's Blog"
+theme = "PaperMod"
+
+paginate = 10
+enableRobotsTXT = true
+buildDrafts = false
+buildFuture = false
+buildExpired = false
+
+[params]
+  env = "production"
+  title = "Adnatull's Blog"
+  description = "Personal development, career notes, and hiking & travel stories"
+  author = "Adnatull Al Masum"
+  defaultTheme = "auto"
+  mainSections = ["dev", "travel"]  # homepage shows recent posts from both sections combined
+  ShowReadingTime = true
+  ShowShareButtons = true
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  ShowToc = true
+  images = ["images/logo.jpg"]
+
+  [params.homeInfoParams]
+    Title = "Welcome"
+    Content = "Notes on code, career, hiking, and travel."
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true   # allows raw HTML like <center>, <pre> in old posts
+  [markup.highlight]
+    noClasses = false
+
+[[menu.main]]
+  identifier = "dev"
+  name = "Dev & Career"
+  url = "/dev/"
+  weight = 10
+
+[[menu.main]]
+  identifier = "travel"
+  name = "Travel & Hiking"
+  url = "/travel/"
+  weight = 11
+
+[[menu.main]]
+  identifier = "tags"
+  name = "Tags"
+  url = "/tags/"
+  weight = 20
+
+[[menu.main]]
+  identifier = "categories"
+  name = "Categories"
+  url = "/categories/"
+  weight = 30
+
+# Section-specific URL structures
+[permalinks]
+  dev = "/dev/:year/:month/:day/:slug/"     # full date + topic, matches content/dev/YYYY/MM/DD/topic/ bundles
+  travel = "/travel/:year/:month/:day/:slug/" # full date + location, matches content/travel/YYYY/MM/DD/location/ bundles
