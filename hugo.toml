@@ -28,7 +28,7 @@ buildExpired = false
 
   # --- Person identity, used by layouts/partials/extend_head.html to emit ---
   # --- schema.org Person JSON-LD. Edit these to correct any fact below.   ---
-  personName = "Mohd Adnatull Al Masum"
+  personName = "Adnatull Al Masum"
   personAlternateName = "Adnatull"
   personJobTitle = "Software Engineer & Data Scientist"   # CONFIRM: exact current title
   personAlumniOf = "RMIT University"                       # CONFIRM: correct institution
@@ -45,9 +45,9 @@ buildExpired = false
   [params.homeInfoParams]
     Title = "Hi 👋"
     Content = """
-I'm **Mohd Adnatull Al Masum** (Adnatull) — a Software Engineer and Data Scientist based in Melbourne, Australia.
+I'm **Adnatull Al Masum** (Adnatull) — a Software Engineer and Data Scientist based in Melbourne, Australia.
 
-I'm currently studying a Master of Data Science at RMIT University, on top of a Bachelor's in Computer Science and Engineering. I've built systems as a Software Engineer at IQVIA and a .NET Developer at Ding, working across Python, FastAPI, R, C#, and ML pipelines for things like industrial computer vision. I'm also a long-time competitive programmer, solving problems in C and C++ on [HackerRank](https://www.hackerrank.com/profile/Adnatull) and [uHunt](https://uhunt.onlinejudge.org/id/757063).
+I'm currently studying a Master of Data Science at RMIT University, on top of a Bachelor's in Computer Science and Engineering. I've built systems as a Software Engineer at IQVIA and a .NET Developer at Ding, working across Python, FastAPI, C#, and ML pipelines for things like industrial computer vision. I'm also a long-time competitive programmer, solving problems in C and C++ on [HackerRank](https://www.hackerrank.com/profile/Adnatull) and [uHunt](https://uhunt.onlinejudge.org/id/757063).
 
 Outside of code, I hike and photograph trails across Victoria — from the Cathedral Range to Wilsons Promontory — and keep a running log of anime and Japanese slice-of-life film on [MyAnimeList](https://myanimelist.net/profile/Adnatull) and [MyDramaList](https://mydramalist.com/profile/Adnatull).
 """
