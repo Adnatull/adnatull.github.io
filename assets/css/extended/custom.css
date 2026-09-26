@@ -5,29 +5,36 @@
   max-width: 100%;
   border-radius: 4px;
 }
+
 .ig-gallery {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 4px;
   margin: 1.5rem 0;
 }
+
 .ig-gallery-item {
   display: block;
   aspect-ratio: 1 / 1;
   overflow: hidden;
   border-radius: 4px;
 }
+
 .ig-gallery-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.2s ease;
 }
+
 .ig-gallery-item:hover img {
   transform: scale(1.05);
 }
+
 @media (max-width: 600px) {
-  .ig-gallery { grid-template-columns: repeat(2, 1fr); }
+  .ig-gallery {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 /* --- Lightbox --- */
@@ -35,19 +42,21 @@
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.9);
+  background: rgba(0, 0, 0, 0.9);
   z-index: 999;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   cursor: zoom-out;
 }
+
 .ig-lightbox img {
   max-width: 92vw;
   max-height: 85vh;
   object-fit: contain;
   border-radius: 4px;
 }
+
 .ig-lightbox-caption {
   color: #fff;
   margin-top: 1rem;
@@ -63,6 +72,7 @@
   right: 24px;
   z-index: 500;
 }
+
 .ig-music-toggle {
   width: 48px;
   height: 48px;
@@ -70,39 +80,82 @@
   border: none;
   background: var(--entry, #222);
   color: var(--primary, #fff);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
   font-size: 1.3rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 .ig-music-toggle.is-playing {
   animation: ig-pulse 1.4s infinite ease-in-out;
 }
+
 @keyframes ig-pulse {
-  0%   { box-shadow: 0 0 0 0 rgba(120,120,120,0.5); }
-  70%  { box-shadow: 0 0 0 10px rgba(120,120,120,0); }
-  100% { box-shadow: 0 0 0 0 rgba(120,120,120,0); }
+  0% {
+    box-shadow: 0 0 0 0 rgba(120, 120, 120, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(120, 120, 120, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(120, 120, 120, 0);
+  }
 }
 
-
-/* Instagram-style 3-column photo grid on Travel & Home pages */
+/* --- Instagram-style photo grid for list pages --- */
 .list:not(.single) .main {
-  max-width: 1020px;
+  max-width: 1080px;
   margin: 0 auto;
   padding: 10px;
 }
 
-/* Transform the standard post list into a multi-column photo grid */
+/* Responsive grid layout */
+@media (min-width: 768px) {
+  .list:not(.single) .main {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    align-items: start;
+  }
+}
+
+@media (max-width: 767px) {
+  .list:not(.single) .main {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    align-items: start;
+  }
+}
+
+/* Force About Me / Profile / Header info to span the entire top width */
+.list:not(.single) .first-entry,
+.list:not(.single) .profile,
+.list:not(.single) .profile_inner,
+.list:not(.single) .home-info,
+.list:not(.single) .page-header {
+  grid-column: 1 / -1 !important;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.profile {
+  text-align: left;
+  padding: 10px 0;
+}
+
+/* Post Cards */
 .list:not(.single) .post-entry {
-  display: inline-block;
-  vertical-align: top;
-  margin-bottom: 20px;
-  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
   overflow: hidden;
-  transition: transform 0.2s ease;
   border: 1px solid var(--border);
+  background: var(--entry);
+  transition: transform 0.2s ease;
+  margin-bottom: 0;
 }
 
 .list:not(.single) .post-entry:hover {
@@ -114,7 +167,7 @@
   width: 100%;
   aspect-ratio: 1 / 1;
   overflow: hidden;
-  margin-bottom: 0;
+  margin: 0;
 }
 
 .list:not(.single) .entry-cover img {
@@ -128,14 +181,14 @@
   transform: scale(1.04);
 }
 
-/* Compact caption/title overlay underneath the square photo */
+/* Post header & text styling */
 .list:not(.single) .entry-header {
-  padding: 10px 12px 6px;
+  padding: 12px 14px 6px;
 }
 
 .list:not(.single) .entry-header h2 {
   font-size: 1rem;
-  line-height: 1.3;
+  line-height: 1.35;
   margin: 0;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -143,34 +196,19 @@
   overflow: hidden;
 }
 
-.list:not(.single) .entry-content,
-.list:not(.single) .entry-footer {
-  padding: 0 12px 10px;
-  font-size: 0.8rem;
+.list:not(.single) .entry-content {
+  padding: 0 14px 8px;
+  font-size: 0.85rem;
   color: var(--secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-/* Responsive grid layout */
-@media (min-width: 768px) {
-  .list:not(.single) .main {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-  }
-
-  .list:not(.single) .post-entry {
-    margin-bottom: 0;
-  }
-}
-
-@media (max-width: 767px) {
-  .list:not(.single) .main {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-  }
-
-  .list:not(.single) .post-entry {
-    margin-bottom: 0;
-  }
+.list:not(.single) .entry-footer {
+  padding: 0 14px 12px;
+  font-size: 0.78rem;
+  color: var(--secondary);
+  margin-top: auto;
 }
