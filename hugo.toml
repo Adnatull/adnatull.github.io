@@ -66,7 +66,7 @@ Outside of code, I hike and photograph trails across Victoria and keep a running
     url = "https://www.hackerrank.com/profile/Adnatull"
 
 [params.cover]
-  hidden = false          # Show cover images on single post pages
+  hidden = true          # Show cover images on single post pages
   hiddenInList = false    # Show cover images on home / list pages
   
 [markup]
