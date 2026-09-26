@@ -91,23 +91,89 @@ def download_from_drive(file_id: str, dest: Path) -> None:
 
 # ------------------------------------------------------------- IG parsing
 
+import urllib.parse
+
 def extract_location(post: dict) -> str:
-    """Finds location metadata wherever Meta stored it."""
-    candidates = [
+    """Finds named locations from Meta's diverse schema (posts, reels, and label_values)."""
+    # 1. Check standard direct keys
+    for candidate in [
         post.get("location"),
         post.get("location_data"),
-    ]
-    if isinstance(post.get("media"), list) and post["media"]:
-        candidates.append(post["media"][0].get("location"))
-
-    for candidate in candidates:
+        (post.get("media") or [{}])[0].get("location") if isinstance(post.get("media"), list) and post.get("media") else None,
+    ]:
         if isinstance(candidate, str) and candidate.strip():
             return fix_ig_mojibake(candidate.strip())
         elif isinstance(candidate, dict):
             name = candidate.get("name") or candidate.get("address")
             if name:
-                return fix_ig_mojibake(name.strip())
+                return fix_ig_mojibake(str(name).strip())
+
+    # 2. Check label_values -> title: "Place" (Used in posts.json)
+    if "label_values" in post and isinstance(post["label_values"], list):
+        for lv in post["label_values"]:
+            if isinstance(lv, dict) and lv.get("title") == "Place":
+                for sub_dict in lv.get("dict", []):
+                    for item in sub_dict.get("dict", []):
+                        if item.get("label") == "Name" and item.get("value"):
+                            return fix_ig_mojibake(str(item["value"]).strip())
+
     return ""
+
+
+def extract_coordinates(post: dict) -> tuple[float, float] | None:
+    """Extracts (latitude, longitude) from EXIF metadata or label_values."""
+    # 1. Check post-level label_values (Used in posts.json)
+    if "label_values" in post and isinstance(post["label_values"], list):
+        lat_val = None
+        lon_val = None
+        for lv in post["label_values"]:
+            if not isinstance(lv, dict):
+                continue
+            if lv.get("label") == "Latitude" and lv.get("value"):
+                try:
+                    lat_val = float(lv["value"])
+                except (ValueError, TypeError):
+                    pass
+            elif lv.get("label") == "Longitude" and lv.get("value"):
+                try:
+                    lon_val = float(lv["value"])
+                except (ValueError, TypeError):
+                    pass
+        if lat_val and lon_val and (lat_val != 0.0 or lon_val != 0.0):
+            return (lat_val, lon_val)
+
+    # 2. Check media array and individual items
+    media_items = []
+    if "media" in post and isinstance(post["media"], list):
+        media_items.extend(post["media"])
+    elif isinstance(post, dict):
+        media_items.append(post)
+
+    # In posts.json, child media items are nested inside label_values -> label: "Media"
+    if "label_values" in post and isinstance(post["label_values"], list):
+        for lv in post["label_values"]:
+            if isinstance(lv, dict) and lv.get("label") == "Media" and "media" in lv:
+                media_items.extend(lv["media"])
+
+    for item in media_items:
+        if not isinstance(item, dict):
+            continue
+        meta = item.get("media_metadata", {})
+        photo_meta = meta.get("photo_metadata", {})
+        video_meta = meta.get("video_metadata", {})
+
+        for p in (photo_meta, video_meta):
+            exif_list = p.get("exif_data", [])
+            for entry in exif_list:
+                if isinstance(entry, dict) and "latitude" in entry and "longitude" in entry:
+                    try:
+                        lat = float(entry["latitude"])
+                        lon = float(entry["longitude"])
+                        if lat != 0.0 or lon != 0.0:
+                            return (lat, lon)
+                    except (ValueError, TypeError):
+                        continue
+    return None
 
 
 def strict_parse_post(post: dict, export_root: Path) -> dict:
@@ -161,12 +227,24 @@ def strict_parse_post(post: dict, export_root: Path) -> dict:
     if ts is None:
         raise ValueError("no timestamp found")
 
+    # Look for coordinates in EXIF
+    coords = extract_coordinates(post)
+    
+    # If no direct location name was found in Instagram, resolve via coordinates with Gemini
+    location = extract_location(post)
+    if not location and coords:
+        resolved_name = get_place_name_from_gemini(coords[0], coords[1])
+        if resolved_name:
+            location = resolved_name
+
     return {
         "caption": caption,
         "timestamp": int(ts),
-        "location": extract_location(post),
+        "location": location,
+        "coords": coords,  # (lat, lon) tuple or None
         "media_files": media_files,
     }
+
 
 
 def ai_parse_post(post: dict) -> dict | None:
@@ -243,6 +321,35 @@ def stable_post_id(post: dict) -> str:
         return ""
     return hashlib.sha256("|".join(clean_uris).encode()).hexdigest()[:16]
 
+
+
+
+def get_place_name_from_gemini(lat: float, lon: float) -> str:
+    """Uses Gemini 2.5 Flash to reverse-geocode coordinates to a descriptive location name."""
+    api_key = os.environ.get("GEMINI_API_KEY")
+    if not api_key:
+        return ""
+
+    try:
+        from google import genai
+        client = genai.Client(api_key=api_key)
+        prompt = (
+            f"Given the coordinates latitude: {lat}, longitude: {lon}, what is the name "
+            "of this specific place, park, landmark, reserve, lookout, or suburb? "
+            "Respond with ONLY the short place name (max 5 words, e.g. 'St Kilda Pier, Melbourne' "
+            "or 'Grampians National Park'). If you are uncertain of the exact landmark, just return "
+            "the suburb/city and state. Do not include any explanations or punctuation."
+        )
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt,
+        )
+        name = response.text.strip().replace('"', '').replace('\n', '')
+        return name
+    except Exception as e:
+        print(f"    Gemini reverse geocode failed for ({lat}, {lon}): {e}")
+        return ""
+
 import subprocess
 import json
 
@@ -314,12 +421,16 @@ def compress_video(src: Path, dest: Path) -> None:
 
 def write_hugo_post(parsed: dict, post_id: str) -> None:
     dt = datetime.fromtimestamp(parsed["timestamp"], tz=timezone.utc)
+    coords = parsed.get("coords")
     
-    # Priority: Location -> Caption first line -> Date
+    # 1. Determine Title and Slug Seed
     first_caption_line = parsed["caption"].split("\n")[0].strip() if parsed["caption"] else ""
     if parsed["location"]:
         title = parsed["location"]
         slug_seed = parsed["location"]
+    elif coords:
+        title = f"Location {coords[0]:.4f}, {coords[1]:.4f}"
+        slug_seed = f"loc-{coords[0]:.4f}-{coords[1]:.4f}"
     elif first_caption_line:
         title = first_caption_line[:60]
         slug_seed = first_caption_line[:40]
@@ -337,8 +448,23 @@ def write_hugo_post(parsed: dict, post_id: str) -> None:
         n += 1
     bundle_dir.mkdir(parents=True)
 
+    # 2. Build Clickable Map Link
+    map_link_md = ""
+    if coords:
+        lat, lon = coords
+        maps_url = f"https://www.google.com/maps/search/?api=1&query={lat},{lon}"
+        display_label = parsed["location"] if parsed["location"] else f"{lat:.5f}, {lon:.5f}"
+        map_link_md = f"📍 **Location:** [{display_label}]({maps_url})\n\n"
+    elif parsed["location"]:
+        # Fallback search if name exists but no exact lat/lon
+        encoded_loc = urllib.parse.quote(parsed["location"])
+        maps_url = f"https://www.google.com/maps/search/?api=1&query={encoded_loc}"
+        map_link_md = f"📍 **Location:** [{parsed['location']}]({maps_url})\n\n"
+
+    # 3. Media handling (images + videos)
     gallery_lines = []
     video_tags = []
+    cover_name = f"01{parsed['media_files'][0]['path'].suffix.lower()}"
 
     for i, m in enumerate(parsed["media_files"], start=1):
         ext = m["path"].suffix.lower()
@@ -346,7 +472,6 @@ def write_hugo_post(parsed: dict, post_id: str) -> None:
         dest_file = bundle_dir / out_name
 
         if m["is_video"]:
-            # If the video exceeds 80MB, compress it using ffmpeg
             if m["path"].stat().st_size > MAX_VIDEO_BYTES:
                 compress_video(m["path"], dest_file)
             else:
@@ -363,8 +488,7 @@ def write_hugo_post(parsed: dict, post_id: str) -> None:
             caption = m["caption"].replace("|", "-").strip()
             gallery_lines.append(f"{out_name} | {caption}" if caption else out_name)
 
-    cover_name = f"01{parsed['media_files'][0]['path'].suffix.lower()}"
-
+    # 4. Hugo Frontmatter
     frontmatter = (
         "---\n"
         f'title: "{title.replace(chr(34), chr(39))}"\n'
@@ -380,9 +504,10 @@ def write_hugo_post(parsed: dict, post_id: str) -> None:
         "---\n\n"
     )
 
-    body = ""
+    # 5. Assemble Markdown Body with Map Link above <!--more-->
+    body = map_link_md
     if parsed["caption"]:
-        body += f"{parsed['caption'].strip()}\n<!--more-->\n\n"
+        body += f"{parsed['caption'].strip()}\n\n<!--more-->\n\n"
     else:
         body += "<!--more-->\n\n"
 
