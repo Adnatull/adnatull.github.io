@@ -59,11 +59,38 @@
 </div>
 
 <div id="ig-lightbox" class="ig-lightbox" style="display: none;" onclick="handleLightboxBackdrop(event)">
-  <button type="button" class="ig-lb-btn ig-lb-close" onclick="closeIgLightbox(event)">&times;</button>
+  <!-- Zoom & Close Controls Header -->
+  <div class="ig-lb-tools" onclick="event.stopPropagation()">
+    <button type="button" class="ig-lb-btn ig-lb-tool" onclick="zoomIgImage(0.3, event)" title="Zoom in">
+      <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        <line x1="11" y1="8" x2="11" y2="14"></line>
+        <line x1="8" y1="11" x2="14" y2="11"></line>
+      </svg>
+    </button>
+    <button type="button" class="ig-lb-btn ig-lb-tool" onclick="zoomIgImage(-0.3, event)" title="Zoom out">
+      <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        <line x1="8" y1="11" x2="14" y2="11"></line>
+      </svg>
+    </button>
+    <button type="button" class="ig-lb-btn ig-lb-tool" onclick="resetIgZoom(event)" title="Reset zoom">
+      <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+        <path d="M3 3v5h5"></path>
+      </svg>
+    </button>
+    <button type="button" class="ig-lb-btn ig-lb-close" onclick="closeIgLightbox(event)" title="Close">&times;</button>
+  </div>
+
   <button type="button" class="ig-lb-btn ig-lb-prev" onclick="stepIgSlide(-1, event)">&#10094;</button>
 
   <div class="ig-lb-content" onclick="event.stopPropagation()">
-    <img id="ig-lightbox-img" src="" alt="" />
+    <div class="ig-lb-img-wrap" id="igLbImgWrap">
+      <img id="ig-lightbox-img" src="" alt="" ondblclick="toggleIgZoom(event)" />
+    </div>
     <div id="ig-lightbox-caption" class="ig-lightbox-caption"></div>
   </div>
 
@@ -74,6 +101,12 @@
 (function() {
   var currentIndex = 0;
   var galleryItems = [];
+  var currentScale = 1;
+  var panX = 0;
+  var panY = 0;
+  var isPanning = false;
+  var startX = 0;
+  var startY = 0;
   var touchStartX = 0;
   var touchEndX = 0;
 
@@ -88,6 +121,41 @@
     });
   }
 
+  function updateTransform() {
+    var img = document.getElementById('ig-lightbox-img');
+    if (!img) return;
+    img.style.transform = 'translate(' + panX + 'px, ' + panY + 'px) scale(' + currentScale + ')';
+    img.style.cursor = currentScale > 1 ? (isPanning ? 'grabbing' : 'grab') : 'zoom-in';
+  }
+
+  window.zoomIgImage = function(delta, e) {
+    if (e) e.stopPropagation();
+    currentScale = Math.min(Math.max(1, currentScale + delta), 4);
+    if (currentScale === 1) {
+      panX = 0;
+      panY = 0;
+    }
+    updateTransform();
+  };
+
+  window.resetIgZoom = function(e) {
+    if (e) e.stopPropagation();
+    currentScale = 1;
+    panX = 0;
+    panY = 0;
+    updateTransform();
+  };
+
+  window.toggleIgZoom = function(e) {
+    if (e) e.stopPropagation();
+    if (currentScale > 1) {
+      resetIgZoom();
+    } else {
+      currentScale = 2.2;
+      updateTransform();
+    }
+  };
+
   function showSlide(index) {
     if (!galleryItems.length) return;
     if (index >= galleryItems.length) {
@@ -97,6 +165,8 @@
     } else {
       currentIndex = index;
     }
+
+    resetIgZoom();
 
     var item = galleryItems[currentIndex];
     var img = document.getElementById('ig-lightbox-img');
@@ -124,6 +194,7 @@
     var lb = document.getElementById('ig-lightbox');
     lb.style.display = 'none';
     document.body.style.overflow = '';
+    resetIgZoom();
     document.removeEventListener('keydown', handleLightboxKeydown);
   };
 
@@ -139,9 +210,45 @@
   };
 
   function handleLightboxKeydown(e) {
-    if (e.key === 'ArrowRight') stepIgSlide(1);
-    if (e.key === 'ArrowLeft') stepIgSlide(-1);
+    if (e.key === 'ArrowRight' && currentScale === 1) stepIgSlide(1);
+    if (e.key === 'ArrowLeft' && currentScale === 1) stepIgSlide(-1);
+    if (e.key === '+' || e.key === '=') zoomIgImage(0.3);
+    if (e.key === '-' || e.key === '_') zoomIgImage(-0.3);
+    if (e.key === '0') resetIgZoom();
     if (e.key === 'Escape') closeIgLightbox();
+  }
+
+  // Pan image with mouse when zoomed in
+  var wrap = document.getElementById('igLbImgWrap');
+  if (wrap) {
+    wrap.addEventListener('mousedown', function(e) {
+      if (currentScale <= 1) return;
+      isPanning = true;
+      startX = e.clientX - panX;
+      startY = e.clientY - panY;
+      updateTransform();
+    });
+
+    window.addEventListener('mousemove', function(e) {
+      if (!isPanning) return;
+      panX = e.clientX - startX;
+      panY = e.clientY - startY;
+      updateTransform();
+    });
+
+    window.addEventListener('mouseup', function() {
+      if (isPanning) {
+        isPanning = false;
+        updateTransform();
+      }
+    });
+
+    // Mouse wheel zoom
+    wrap.addEventListener('wheel', function(e) {
+      e.preventDefault();
+      var delta = e.deltaY < 0 ? 0.2 : -0.2;
+      zoomIgImage(delta);
+    }, { passive: false });
   }
 
   // Bind click listener to each gallery image
@@ -152,14 +259,16 @@
     });
   });
 
-  // Mobile swipe listener
+  // Mobile swipe listener (active only when image is not zoomed in)
   var lb = document.getElementById('ig-lightbox');
   if (lb) {
     lb.addEventListener('touchstart', function(e) {
+      if (currentScale > 1) return;
       touchStartX = e.changedTouches[0].screenX;
     }, { passive: true });
 
     lb.addEventListener('touchend', function(e) {
+      if (currentScale > 1) return;
       touchEndX = e.changedTouches[0].screenX;
       if (touchStartX - touchEndX > 50) stepIgSlide(1);
       if (touchEndX - touchStartX > 50) stepIgSlide(-1);
