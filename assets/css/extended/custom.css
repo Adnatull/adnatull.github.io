@@ -1,0 +1,176 @@
+/* --- Center images in post content (replaces old <center> tags) --- */
+.post-content img {
+  display: block;
+  margin: 1.5rem auto;
+  max-width: 100%;
+  border-radius: 4px;
+}
+.ig-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  margin: 1.5rem 0;
+}
+.ig-gallery-item {
+  display: block;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 4px;
+}
+.ig-gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.2s ease;
+}
+.ig-gallery-item:hover img {
+  transform: scale(1.05);
+}
+@media (max-width: 600px) {
+  .ig-gallery { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* --- Lightbox --- */
+.ig-lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.9);
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  cursor: zoom-out;
+}
+.ig-lightbox img {
+  max-width: 92vw;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 4px;
+}
+.ig-lightbox-caption {
+  color: #fff;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  text-align: center;
+  max-width: 80vw;
+}
+
+/* --- Opt-in music player --- */
+.ig-music-player {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 500;
+}
+.ig-music-toggle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: var(--entry, #222);
+  color: var(--primary, #fff);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ig-music-toggle.is-playing {
+  animation: ig-pulse 1.4s infinite ease-in-out;
+}
+@keyframes ig-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(120,120,120,0.5); }
+  70%  { box-shadow: 0 0 0 10px rgba(120,120,120,0); }
+  100% { box-shadow: 0 0 0 0 rgba(120,120,120,0); }
+}
+
+
+/* Instagram-style 3-column photo grid on Travel & Home pages */
+.list:not(.single) .main {
+  max-width: 1020px;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+/* Transform the standard post list into a multi-column photo grid */
+.list:not(.single) .post-entry {
+  display: inline-block;
+  vertical-align: top;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+  border: 1px solid var(--border);
+}
+
+.list:not(.single) .post-entry:hover {
+  transform: translateY(-2px);
+}
+
+/* Ensure the cover image fills an Instagram square aspect ratio */
+.list:not(.single) .entry-cover {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+
+.list:not(.single) .entry-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.list:not(.single) .post-entry:hover .entry-cover img {
+  transform: scale(1.04);
+}
+
+/* Compact caption/title overlay underneath the square photo */
+.list:not(.single) .entry-header {
+  padding: 10px 12px 6px;
+}
+
+.list:not(.single) .entry-header h2 {
+  font-size: 1rem;
+  line-height: 1.3;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.list:not(.single) .entry-content,
+.list:not(.single) .entry-footer {
+  padding: 0 12px 10px;
+  font-size: 0.8rem;
+  color: var(--secondary);
+}
+
+/* Responsive grid layout */
+@media (min-width: 768px) {
+  .list:not(.single) .main {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .list:not(.single) .post-entry {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .list:not(.single) .main {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .list:not(.single) .post-entry {
+    margin-bottom: 0;
+  }
+}

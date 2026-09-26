@@ -1,0 +1,64 @@
+{
+  "reason": "could not parse with strict or AI fallback",
+  "post": {
+    "timestamp": 1789740740,
+    "media": [],
+    "label_values": [
+      {
+        "label": "Ad library public URL"
+      },
+      {
+        "label": "Brand partner",
+        "vec": []
+      },
+      {
+        "label": "Brand partner's profile",
+        "vec": []
+      },
+      {
+        "label": "URL",
+        "value": "https://www.instagram.com/p/Ddbm0ocDyMo/",
+        "href": "https://www.instagram.com/p/Ddbm0ocDyMo/"
+      },
+      {
+        "label": "Caption",
+        "value": "The easiest way to set yourself up for success, is by curating your environment.. \u00f0\u009f\u0091\u0087\n\nThat includes your feed too.\n\nHere are my favorite creators who consistently post valuable content around psychology, business, health, and self-improvement.\n\nI highly recommend you follow them all: \u00f0\u009f\u0091\u0087\n\n1) @jaymiemoran\n\n2) @maria.wendt\n\n3) @jillianturecki\n\n4) @thomasdelauer\n\n5) @aiautomationchannels\n\n6) @kettlebellgrant\n\n7) @robdanceofficial\n\n8) @yung_pueblo \n\n9) @drjockers\n\n10) @kaylabarnes\n\n11) @tiffanyachang\n\n12) @the.financegoddess\n\n13) @vexking\n\n14) @thepersonaldevelopmentschool\n\n15) @realjoemccarthy\n\n16) @love.amy.nyc\n\n17) @midlife.mentor\n\n18) @theorder.global\n\n19) @justinthehuncho\n\n20) @thecoppervessel\n\n21) @psychologyposts_\n\n22) @maythesciencebewithyou\n\n23) @skillofmanifestation\n\n24) @powerofpsychology\n\n25) @psychologypeers\n\n26) @weposttech\n\nComment your favorite! \u00f0\u009f\u0091\u0087\u00e2\u009d\u00a4\u00ef\u00b8\u008f\u00f0\u009f\u0092\u00ac"
+      },
+      {
+        "label": "Title",
+        "value": ""
+      },
+      {
+        "dict": [],
+        "title": "Hashtags"
+      },
+      {
+        "dict": [
+          {
+            "dict": [
+              {
+                "label": "URL",
+                "value": "https://www.amazon.com/Color-Stack-Challenge-Relatable-Instructions/dp/B0FYJ7PWBY?maas=maas_adg_F9D304E1EEF348282467965EFB37F59B_afap_abs&ref_=aa_maas&tag=maas&th=1"
+              },
+              {
+                "label": "Name",
+                "value": "Selfcare ForHeart"
+              },
+              {
+                "label": "Username",
+                "value": "selfcareforheart"
+              }
+            ],
+            "title": ""
+          }
+        ],
+        "title": "Owner"
+      },
+      {
+        "dict": [],
+        "title": "Brand partner"
+      }
+    ],
+    "fbid": "17841401438016032:18132702850645838:1789740740::DYIImpressionsData"
+  }
+}

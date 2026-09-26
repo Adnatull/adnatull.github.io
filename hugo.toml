@@ -1,0 +1,106 @@
+baseURL = "https://adnatull.github.io/"
+languageCode = "en-us"
+title = "Adnatull's Blog"
+theme = "PaperMod"
+
+enableRobotsTXT = true
+
+[pagination]
+  pagerSize = 10
+buildDrafts = false
+buildFuture = false
+buildExpired = false
+
+[params]
+  env = "production"
+  title = "Adnatull's Blog"
+  description = "Personal development, career notes, and hiking & travel stories"
+  author = "Adnatull Al Masum"
+  defaultTheme = "auto"
+  mainSections = ["dev", "travel"]  # homepage shows recent posts from both sections combined
+  ShowReadingTime = true
+  ShowShareButtons = true
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  ShowToc = true
+  images = ["images/logo.jpg"]
+
+  # --- Person identity, used by layouts/partials/extend_head.html to emit ---
+  # --- schema.org Person JSON-LD. Edit these to correct any fact below.   ---
+  personName = "Adnatull Al Masum"
+  personAlternateName = "Adnatull"
+  personJobTitle = "Software Engineer & Data Scientist"   # CONFIRM: exact current title
+  personAlumniOf = "RMIT University"                       # CONFIRM: correct institution
+  personSameAs = [
+    "https://github.com/adnatull",
+    "https://www.linkedin.com/in/adnatull",
+    "https://www.hackerrank.com/profile/Adnatull",
+    "https://uhunt.onlinejudge.org/id/757063",
+    "https://myanimelist.net/profile/Adnatull",
+    "https://mydramalist.com/profile/Adnatull",
+    "https://www.instagram.com/adnatull",
+  ]  # CONFIRM: every URL above actually resolves to your profile before pushing
+
+  [params.homeInfoParams]
+    Title = "Hi 👋"
+    Content = """
+I'm **Adnatull Al Masum** (Adnatull) — a Software Engineer and Data Scientist based in Melbourne, Australia.
+
+I'm currently studying a Master of Data Science at RMIT University, on top of a Bachelor's in Computer Science and Engineering. I've built systems as a Software Engineer at IQVIA and a .NET Developer at Ding, working across Python, FastAPI, C#, and ML pipelines for things like industrial computer vision. I'm also a long-time competitive programmer, solving problems in C and C++ on [HackerRank](https://www.hackerrank.com/profile/Adnatull) and [uHunt](https://uhunt.onlinejudge.org/id/757063).
+
+Outside of code, I hike and photograph trails across Victoria — from the Cathedral Range to Wilsons Promontory — and keep a running log of anime and Japanese slice-of-life film on [MyAnimeList](https://myanimelist.net/profile/Adnatull) and [MyDramaList](https://mydramalist.com/profile/Adnatull).
+"""
+
+  [[params.socialIcons]]
+    name = "github"
+    url = "https://github.com/adnatull"
+  [[params.socialIcons]]
+    name = "linkedin"
+    url = "https://www.linkedin.com/in/adnatull"
+  [[params.socialIcons]]
+    name = "instagram"
+    url = "https://www.instagram.com/adnatull"
+  [[params.socialIcons]]
+    name = "hackerrank"
+    url = "https://www.hackerrank.com/profile/Adnatull"
+
+[params.cover]
+  hidden = false          # Show cover images on single post pages
+  hiddenInList = false    # Show cover images on home / list pages
+  
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true   # allows raw HTML like <center>, <pre> in old posts
+  [markup.highlight]
+    noClasses = false
+
+[[menu.main]]
+  identifier = "dev"
+  name = "Dev & Career"
+  url = "/dev/"
+  weight = 10
+
+[[menu.main]]
+  identifier = "travel"
+  name = "Travel & Hiking"
+  url = "/travel/"
+  weight = 11
+
+[[menu.main]]
+  identifier = "tags"
+  name = "Tags"
+  url = "/tags/"
+  weight = 20
+
+[[menu.main]]
+  identifier = "categories"
+  name = "Categories"
+  url = "/categories/"
+  weight = 30
+
+# Section-specific URL structures
+[permalinks]
+  dev = "/dev/:year/:month/:day/:slug/"     # full date + topic, matches content/dev/YYYY/MM/DD/topic/ bundles
+  travel = "/travel/:year/:month/:day/:slug/" # full date + location, matches content/travel/YYYY/MM/DD/location/ bundles

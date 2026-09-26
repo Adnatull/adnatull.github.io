@@ -1,0 +1,31 @@
+{{/*
+  Person structured data (schema.org / JSON-LD).
+  Tells Google and LLM crawlers that this site belongs to one specific
+  person and lists every external profile that should be linked to that
+  identity ("sameAs" entity resolution).
+
+  Everything here is pulled from [params] in hugo.toml — to update your
+  bio facts or add/remove a profile link, edit the config, not this file.
+*/}}
+{{- if and site.Params.personName site.Params.personSameAs }}
+  {{- $person := dict
+      "@context" "https://schema.org"
+      "@type" "Person"
+      "name" site.Params.personName
+      "url" site.BaseURL
+      "sameAs" site.Params.personSameAs
+  }}
+  {{- with site.Params.personAlternateName }}
+    {{- $person = merge $person (dict "alternateName" .) }}
+  {{- end }}
+  {{- with site.Params.personJobTitle }}
+    {{- $person = merge $person (dict "jobTitle" .) }}
+  {{- end }}
+  {{- with site.Params.personAlumniOf }}
+    {{- $person = merge $person (dict "alumniOf" .) }}
+  {{- end }}
+<script type="application/ld+json">
+{{ $person | jsonify (dict "indent" "  ") | safeJS }}
+</script>
+{{- end }}
+<meta name="google-site-verification" content="LTYlSnSinj-TEh-rs-PdSiksJJMNBPcjfQVeutk6RUE" />

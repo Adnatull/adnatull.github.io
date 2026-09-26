@@ -1,0 +1,76 @@
+name: Instagram Import
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'instagram-import/pending.txt'
+  workflow_dispatch:
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Check out master branch
+        uses: actions/checkout@v4
+        with:
+          ref: master
+          fetch-depth: 0
+
+      - name: Verify pending file content
+        id: check_pending
+        run: |
+          # Read pending.txt and ignore empty lines or spaces
+          CONTENT=$(sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' instagram-import/pending.txt)
+          if [ -n "$CONTENT" ]; then
+            echo "has_pending=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_pending=false" >> "$GITHUB_OUTPUT"
+            echo "pending.txt is empty. Skipping run."
+          fi
+
+      - name: Set up Python
+        if: steps.check_pending.outputs.has_pending == 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: 'scripts/instagram_import/requirements.txt'
+
+      - name: Install dependencies
+        if: steps.check_pending.outputs.has_pending == 'true'
+        run: |
+          sudo apt-get update && sudo apt-get install -y ffmpeg
+          python -m pip install --upgrade pip
+          pip install -r scripts/instagram_import/requirements.txt
+
+      - name: Run Instagram parser
+        if: steps.check_pending.outputs.has_pending == 'true'
+        env:
+          GDRIVE_SA_KEY_B64: ${{ secrets.GDRIVE_SA_KEY_B64 }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          python scripts/instagram_import/parse.py
+
+      - name: Commit and push changes
+        if: steps.check_pending.outputs.has_pending == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Stage all modified and created files
+          git add content/travel/
+          git add instagram-import-manifest.json
+          git add instagram-import/pending.txt
+          git add instagram-import/quarantine/
+
+          if git diff --staged --quiet; then
+            echo "No changes produced by the import."
+          else
+            git commit -m "chore(instagram): import posts from Google Drive [skip ci]"
+            git push origin master
+          fi

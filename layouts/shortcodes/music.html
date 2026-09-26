@@ -1,0 +1,56 @@
+{{/*
+  Usage inside a page bundle, audio file sitting next to index.md:
+
+  {{< music src="theme.mp3" title="Trail Mix" >}}
+
+  Also works with absolute site-root paths:
+
+  {{< music src="/images/travel/shared/theme.mp3" title="Trail Mix" >}}
+
+  Never autoplays — browsers block autoplay-with-sound, and it's kinder
+  to readers. Tap the floating button to play/pause.
+*/}}
+
+{{ $ref := .Get "src" }}
+{{ $title := .Get "title" | default "Background music" }}
+{{ $page := .Page }}
+
+{{ $url := "" }}
+{{ if strings.HasPrefix $ref "/" }}
+  {{ $url = $ref | relURL }}
+{{ else }}
+  {{ with $page.Resources.GetMatch $ref }}
+    {{ $url = .RelPermalink }}
+  {{ else }}
+    {{ $url = $ref | relURL }}
+  {{ end }}
+{{ end }}
+
+<div class="ig-music-player" data-src="{{ $url }}">
+  <button class="ig-music-toggle" aria-label="Play background music" title="{{ $title }}">
+    <span class="ig-music-icon">♪</span>
+  </button>
+  <audio class="ig-music-audio" loop preload="none">
+    <source src="{{ $url }}" type="audio/mpeg">
+  </audio>
+</div>
+
+<script>
+(function() {
+  document.querySelectorAll('.ig-music-player').forEach(function(player) {
+    var btn = player.querySelector('.ig-music-toggle');
+    var audio = player.querySelector('.ig-music-audio');
+    var playing = false;
+    btn.addEventListener('click', function() {
+      if (!playing) {
+        audio.play();
+        btn.classList.add('is-playing');
+      } else {
+        audio.pause();
+        btn.classList.remove('is-playing');
+      }
+      playing = !playing;
+    });
+  });
+})();
+</script>
