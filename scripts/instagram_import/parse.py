@@ -247,6 +247,43 @@ def strict_parse_post(post: dict, export_root: Path) -> dict:
 
 
 
+# Place this near the top of parse.py with the other global configs
+GEO_CACHE: dict[tuple[float, float], str] = {}
+
+
+def get_place_name_from_gemini(lat: float, lon: float) -> str:
+    """Uses Gemini 3.8 Flash to reverse-geocode coordinates to a descriptive location name."""
+    # Round to 4 decimal places (~11 meters) to hit cache for identical shoot locations
+    cache_key = (round(lat, 4), round(lon, 4))
+    if cache_key in GEO_CACHE:
+        return GEO_CACHE[cache_key]
+
+    api_key = os.environ.get("GEMINI_API_KEY")
+    if not api_key:
+        return ""
+
+    try:
+        from google import genai
+        client = genai.Client(api_key=api_key)
+        prompt = (
+            f"Given the geographic coordinates latitude: {lat}, longitude: {lon}, what is the name "
+            "of this specific place, park, reserve, trail, lookout, or suburb? "
+            "Respond with ONLY the short place name (max 5 words, e.g. 'St Kilda Pier, Melbourne' "
+            "or 'Grampians National Park'). If you cannot identify the exact park or landmark, return "
+            "the suburb/town and state/country. Do not include any punctuation, quotes, or conversational text."
+        )
+        response = client.models.generate_content(
+            model="gemini-3.8-flash",
+            contents=prompt,
+        )
+        name = response.text.strip().replace('"', '').replace('\n', '').strip(".")
+        GEO_CACHE[cache_key] = name
+        return name
+    except Exception as e:
+        print(f"    Gemini reverse geocode failed for ({lat}, {lon}): {e}")
+        return ""
+
+
 def ai_parse_post(post: dict) -> dict | None:
     """Free Gemini fallback for schema drift."""
     api_key = os.environ.get("GEMINI_API_KEY")
@@ -270,7 +307,7 @@ def ai_parse_post(post: dict) -> dict | None:
     try:
         client = genai.Client(api_key=api_key)
         response = client.models.generate_content(
-            model="gemini-2.5-flash",
+            model="gemini-3.8-flash",
             contents=prompt,
             config=types.GenerateContentConfig(
                 response_mime_type="application/json"
@@ -283,7 +320,6 @@ def ai_parse_post(post: dict) -> dict | None:
     except Exception as e:
         print(f"  Gemini fallback failed: {e}")
         return None
-
 
 def resolve_ai_result(data: dict, export_root: Path) -> dict | None:
     media_files = []
@@ -323,32 +359,6 @@ def stable_post_id(post: dict) -> str:
 
 
 
-
-def get_place_name_from_gemini(lat: float, lon: float) -> str:
-    """Uses Gemini 2.5 Flash to reverse-geocode coordinates to a descriptive location name."""
-    api_key = os.environ.get("GEMINI_API_KEY")
-    if not api_key:
-        return ""
-
-    try:
-        from google import genai
-        client = genai.Client(api_key=api_key)
-        prompt = (
-            f"Given the coordinates latitude: {lat}, longitude: {lon}, what is the name "
-            "of this specific place, park, landmark, reserve, lookout, or suburb? "
-            "Respond with ONLY the short place name (max 5 words, e.g. 'St Kilda Pier, Melbourne' "
-            "or 'Grampians National Park'). If you are uncertain of the exact landmark, just return "
-            "the suburb/city and state. Do not include any explanations or punctuation."
-        )
-        response = client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=prompt,
-        )
-        name = response.text.strip().replace('"', '').replace('\n', '')
-        return name
-    except Exception as e:
-        print(f"    Gemini reverse geocode failed for ({lat}, {lon}): {e}")
-        return ""
 
 import subprocess
 import json
