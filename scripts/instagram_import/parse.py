@@ -15,6 +15,10 @@ import sys
 import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
+import time
+import urllib.request
+import urllib.parse
+import json
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 PENDING_FILE = REPO_ROOT / "instagram-import" / "pending.txt"
@@ -26,6 +30,9 @@ WORKDIR = Path("/tmp/instagram-import")
 IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".webp", ".heic"}
 VIDEO_EXTS = {".mp4", ".mov"}
 
+GEO_CACHE: dict[tuple[float, float], str] = {}
+LAST_GEMINI_CALL_TIME = 0.0
+GEMINI_INTERVAL_SECONDS = 15.0
 
 # ---------------------------------------------------------------- utilities
 
@@ -233,7 +240,7 @@ def strict_parse_post(post: dict, export_root: Path) -> dict:
     # If no direct location name was found in Instagram, resolve via coordinates with Gemini
     location = extract_location(post)
     if not location and coords:
-        resolved_name = get_place_name_from_gemini(coords[0], coords[1])
+        resolved_name = resolve_coordinates_to_name(coords[0], coords[1])
         if resolved_name:
             location = resolved_name
 
@@ -246,18 +253,69 @@ def strict_parse_post(post: dict, export_root: Path) -> dict:
     }
 
 
+def reverse_geocode_osm(lat: float, lon: float) -> str:
+    """Uses OpenStreetMap Nominatim for free, accurate reverse geocoding without strict LLM rate limits."""
+    url = f"https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat={lat}&lon={lon}&zoom=14"
+    headers = {
+        "User-Agent": "HugoTravelBlogImporter/1.0 (contact: your-email@example.com)"
+    }
+    
+    try:
+        req = urllib.request.Request(url, headers=headers)
+        with urllib.request.urlopen(req, timeout=5) as response:
+            if response.status == 200:
+                data = json.loads(response.read().decode())
+                address = data.get("address", {})
+                
+                # Check for specific landmark / park / tourist spots first
+                landmark = (
+                    data.get("name")
+                    or address.get("tourism")
+                    or address.get("leisure")
+                    or address.get("national_park")
+                    or address.get("attraction")
+                )
+                
+                locality = (
+                    address.get("suburb")
+                    or address.get("town")
+                    or address.get("city")
+                    or address.get("village")
+                    or address.get("county")
+                )
+                
+                state = address.get("state") or address.get("country", "")
+                
+                parts = []
+                if landmark and landmark != locality:
+                    parts.append(landmark)
+                if locality:
+                    parts.append(locality)
+                elif state:
+                    parts.append(state)
+                    
+                result = ", ".join(parts[:2])
+                # OpenStreetMap respects 1 request per second
+                time.sleep(1.0)
+                return result
+    except Exception as e:
+        print(f"    OSM Nominatim lookup failed: {e}")
+    
+    return ""
 
-# Place this near the top of parse.py with the other global configs
-GEO_CACHE: dict[tuple[float, float], str] = {}
-
+def throttle_gemini() -> None:
+    """Blocks until at least 15 seconds have passed since the previous Gemini call."""
+    global LAST_GEMINI_CALL_TIME
+    now = time.time()
+    elapsed = now - LAST_GEMINI_CALL_TIME
+    if elapsed < GEMINI_INTERVAL_SECONDS:
+        sleep_needed = GEMINI_INTERVAL_SECONDS - elapsed
+        print(f"    Throttling Gemini request (waiting {sleep_needed:.1f}s)...")
+        time.sleep(sleep_needed)
+    LAST_GEMINI_CALL_TIME = time.time()
 
 def get_place_name_from_gemini(lat: float, lon: float) -> str:
-    """Uses Gemini 3.8 Flash to reverse-geocode coordinates to a descriptive location name."""
-    # Round to 4 decimal places (~11 meters) to hit cache for identical shoot locations
-    cache_key = (round(lat, 4), round(lon, 4))
-    if cache_key in GEO_CACHE:
-        return GEO_CACHE[cache_key]
-
+    """Uses Gemini 3.8 Flash with a strict 15s interval and backoff retries."""
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
         return ""
@@ -266,26 +324,52 @@ def get_place_name_from_gemini(lat: float, lon: float) -> str:
         from google import genai
         client = genai.Client(api_key=api_key)
         prompt = (
-            f"Given the geographic coordinates latitude: {lat}, longitude: {lon}, what is the name "
-            "of this specific place, park, reserve, trail, lookout, or suburb? "
-            "Respond with ONLY the short place name (max 5 words, e.g. 'St Kilda Pier, Melbourne' "
-            "or 'Grampians National Park'). If you cannot identify the exact park or landmark, return "
-            "the suburb/town and state/country. Do not include any punctuation, quotes, or conversational text."
+            f"Given coordinates latitude: {lat}, longitude: {lon}, name the specific park, "
+            "beach, trail, lookout, reserve, or suburb. Return ONLY the place name (max 4 words). "
+            "Do not include quotes, periods, or extra explanation."
         )
-        response = client.models.generate_content(
-            model="gemini-3.8-flash",
-            contents=prompt,
-        )
-        name = response.text.strip().replace('"', '').replace('\n', '').strip(".")
-        GEO_CACHE[cache_key] = name
-        return name
+
+        for attempt in range(3):
+            try:
+                throttle_gemini()
+                response = client.models.generate_content(
+                    model="gemini-3.8-flash",
+                    contents=prompt,
+                )
+                return response.text.strip().replace('"', '').replace('\n', '').strip(".")
+            except Exception as e:
+                if "429" in str(e) or "RESOURCE_EXHAUSTED" in str(e):
+                    wait_time = 20 * (attempt + 1)
+                    print(f"    429 received. Waiting {wait_time}s before retrying Gemini...")
+                    time.sleep(wait_time)
+                else:
+                    raise e
     except Exception as e:
         print(f"    Gemini reverse geocode failed for ({lat}, {lon}): {e}")
-        return ""
+
+    return ""
+
+
+def resolve_coordinates_to_name(lat: float, lon: float) -> str:
+    """Primary router: Caches coordinates, checks OpenStreetMap first, falls back to Gemini."""
+    cache_key = (round(lat, 3), round(lon, 3))
+    if cache_key in GEO_CACHE:
+        return GEO_CACHE[cache_key]
+
+    # 1. Primary: Fast, no-cost OpenStreetMap Nominatim
+    name = reverse_geocode_osm(lat, lon)
+    
+    # 2. Secondary fallback: Gemini with rate-limit handling
+    if not name:
+        name = get_place_name_from_gemini(lat, lon)
+
+    if name:
+        GEO_CACHE[cache_key] = name
+    return name
 
 
 def ai_parse_post(post: dict) -> dict | None:
-    """Free Gemini fallback for schema drift."""
+    """Free Gemini fallback for schema drift, adhering to the 15s interval."""
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
         return None
@@ -305,6 +389,7 @@ def ai_parse_post(post: dict) -> dict | None:
     )
 
     try:
+        throttle_gemini()
         client = genai.Client(api_key=api_key)
         response = client.models.generate_content(
             model="gemini-3.8-flash",
