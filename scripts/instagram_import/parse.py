@@ -30,10 +30,11 @@ WORKDIR = Path("/tmp/instagram-import")
 IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".webp", ".heic"}
 VIDEO_EXTS = {".mp4", ".mov"}
 
+
 GEO_CACHE: dict[tuple[float, float], str] = {}
+LAST_OSM_CALL_TIME = 0.0
 LAST_GEMINI_CALL_TIME = 0.0
 GEMINI_INTERVAL_SECONDS = 15.0
-LAST_OSM_CALL_TIME = 0.0
 
 # ---------------------------------------------------------------- utilities
 
@@ -253,12 +254,33 @@ def strict_parse_post(post: dict, export_root: Path) -> dict:
         "media_files": media_files,
     }
 
+def throttle_osm() -> None:
+    """Enforces at least 1.1s between OpenStreetMap requests to comply with policy."""
+    global LAST_OSM_CALL_TIME
+    elapsed = time.time() - LAST_OSM_CALL_TIME
+    if elapsed < 1.1:
+        time.sleep(1.1 - elapsed)
+    LAST_OSM_CALL_TIME = time.time()
+
+
+def throttle_gemini() -> None:
+    """Blocks until at least 15 seconds have elapsed since previous Gemini call."""
+    global LAST_GEMINI_CALL_TIME
+    elapsed = time.time() - LAST_GEMINI_CALL_TIME
+    if elapsed < GEMINI_INTERVAL_SECONDS:
+        sleep_needed = GEMINI_INTERVAL_SECONDS - elapsed
+        print(f"    Throttling Gemini request (waiting {sleep_needed:.1f}s)...")
+        time.sleep(sleep_needed)
+    LAST_GEMINI_CALL_TIME = time.time()
+
 
 def reverse_geocode_osm(lat: float, lon: float) -> str:
-    """Uses OpenStreetMap Nominatim for free, accurate reverse geocoding without strict LLM rate limits."""
+    """Uses OpenStreetMap Nominatim with a valid user-agent to prevent 403 blocks."""
     url = f"https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat={lat}&lon={lon}&zoom=14"
+    
+    # Nominatim requires a valid custom identifier and contact repo/email
     headers = {
-        "User-Agent": "HugoTravelBlogImporter/1.0 (contact: your-email@example.com)"
+        "User-Agent": "AdnatullTravelImporter/1.0 (https://github.com/Adnatull/adnatull.github.io)"
     }
     
     try:
@@ -269,7 +291,6 @@ def reverse_geocode_osm(lat: float, lon: float) -> str:
                 data = json.loads(response.read().decode())
                 address = data.get("address", {})
                 
-                # Check for specific landmark / park / tourist spots first
                 landmark = (
                     data.get("name")
                     or address.get("tourism")
@@ -296,42 +317,22 @@ def reverse_geocode_osm(lat: float, lon: float) -> str:
                 elif state:
                     parts.append(state)
                     
-                result = ", ".join(parts[:2])
-                # OpenStreetMap respects 1 request per second
-                time.sleep(1.0)
-                return result
+                return ", ".join(parts[:2])
     except Exception as e:
         print(f"    OSM Nominatim lookup failed: {e}")
     
     return ""
 
-def throttle_gemini() -> None:
-    """Blocks until at least 15 seconds have passed since the previous Gemini call."""
-    global LAST_GEMINI_CALL_TIME
-    now = time.time()
-    elapsed = now - LAST_GEMINI_CALL_TIME
-    if elapsed < GEMINI_INTERVAL_SECONDS:
-        sleep_needed = GEMINI_INTERVAL_SECONDS - elapsed
-        print(f"    Throttling Gemini request (waiting {sleep_needed:.1f}s)...")
-        time.sleep(sleep_needed)
-    LAST_GEMINI_CALL_TIME = time.time()
-
-def throttle_osm() -> None:
-    """Enforces at least 1.1s between OpenStreetMap requests to comply with their 1 req/sec policy."""
-    global LAST_OSM_CALL_TIME
-    elapsed = time.time() - LAST_OSM_CALL_TIME
-    if elapsed < 1.1:
-        time.sleep(1.1 - elapsed)
-    LAST_OSM_CALL_TIME = time.time()
 
 def get_place_name_from_gemini(lat: float, lon: float) -> str:
-    """Uses Gemini 3.8 Flash with a strict 15s interval and backoff retries."""
+    """Fallback: Uses Gemini 3.8 Flash with retries for 429 and 503 (high demand)."""
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
         return ""
 
     try:
         from google import genai
+        from google.genai import types
         client = genai.Client(api_key=api_key)
         prompt = (
             f"Given coordinates latitude: {lat}, longitude: {lon}, name the specific park, "
@@ -351,9 +352,11 @@ def get_place_name_from_gemini(lat: float, lon: float) -> str:
                 )
                 return response.text.strip().replace('"', '').replace('\n', '').strip(".")
             except Exception as e:
-                if "429" in str(e) or "RESOURCE_EXHAUSTED" in str(e):
-                    wait_time = 20 * (attempt + 1)
-                    print(f"    429 received. Waiting {wait_time}s before retrying Gemini...")
+                err_str = str(e)
+                # Handle rate limit (429) or high demand spikes (503)
+                if any(code in err_str for code in ["429", "RESOURCE_EXHAUSTED", "503", "UNAVAILABLE"]):
+                    wait_time = 15 * (attempt + 1)
+                    print(f"    Gemini temporary delay ({'503 high demand' if '503' in err_str else '429 quota'}). Waiting {wait_time}s before retry {attempt + 1}/3...")
                     time.sleep(wait_time)
                 else:
                     raise e
@@ -361,6 +364,7 @@ def get_place_name_from_gemini(lat: float, lon: float) -> str:
         print(f"    Gemini reverse geocode failed for ({lat}, {lon}): {e}")
 
     return ""
+
 
 
 def resolve_coordinates_to_name(lat: float, lon: float) -> str:
