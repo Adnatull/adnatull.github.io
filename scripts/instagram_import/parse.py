@@ -18,7 +18,7 @@ from pathlib import Path
 import time
 import urllib.request
 import urllib.parse
-import json
+from google.genai import types
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 PENDING_FILE = REPO_ROOT / "instagram-import" / "pending.txt"
@@ -33,6 +33,7 @@ VIDEO_EXTS = {".mp4", ".mov"}
 GEO_CACHE: dict[tuple[float, float], str] = {}
 LAST_GEMINI_CALL_TIME = 0.0
 GEMINI_INTERVAL_SECONDS = 15.0
+LAST_OSM_CALL_TIME = 0.0
 
 # ---------------------------------------------------------------- utilities
 
@@ -261,6 +262,7 @@ def reverse_geocode_osm(lat: float, lon: float) -> str:
     }
     
     try:
+        throttle_osm()
         req = urllib.request.Request(url, headers=headers)
         with urllib.request.urlopen(req, timeout=5) as response:
             if response.status == 200:
@@ -314,6 +316,14 @@ def throttle_gemini() -> None:
         time.sleep(sleep_needed)
     LAST_GEMINI_CALL_TIME = time.time()
 
+def throttle_osm() -> None:
+    """Enforces at least 1.1s between OpenStreetMap requests to comply with their 1 req/sec policy."""
+    global LAST_OSM_CALL_TIME
+    elapsed = time.time() - LAST_OSM_CALL_TIME
+    if elapsed < 1.1:
+        time.sleep(1.1 - elapsed)
+    LAST_OSM_CALL_TIME = time.time()
+
 def get_place_name_from_gemini(lat: float, lon: float) -> str:
     """Uses Gemini 3.8 Flash with a strict 15s interval and backoff retries."""
     api_key = os.environ.get("GEMINI_API_KEY")
@@ -335,6 +345,9 @@ def get_place_name_from_gemini(lat: float, lon: float) -> str:
                 response = client.models.generate_content(
                     model="gemini-3.8-flash",
                     contents=prompt,
+                    config=types.GenerateContentConfig(
+                        automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True)
+                    ),
                 )
                 return response.text.strip().replace('"', '').replace('\n', '').strip(".")
             except Exception as e:
@@ -394,9 +407,10 @@ def ai_parse_post(post: dict) -> dict | None:
         response = client.models.generate_content(
             model="gemini-3.8-flash",
             contents=prompt,
-            config=types.GenerateContentConfig(
-                response_mime_type="application/json"
-            ),
+            config = types.GenerateContentConfig(
+                response_mime_type="application/json",
+                automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
+            )
         )
         data = json.loads(response.text)
         if not data.get("media_uris") or not data.get("timestamp"):
