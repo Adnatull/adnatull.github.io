@@ -87,7 +87,7 @@
 
   <button type="button" class="ig-lb-btn ig-lb-prev" onclick="stepIgSlide(-1, event)">&#10094;</button>
 
-  <div class="ig-lb-content" onclick="event.stopPropagation()">
+  <div class="ig-lb-content" onclick="handleLightboxBackdrop(event)">
     <div class="ig-lb-img-wrap" id="igLbImgWrap">
       <img id="ig-lightbox-img" src="" alt="" ondblclick="toggleIgZoom(event)" />
     </div>
@@ -123,14 +123,21 @@
 
   function updateTransform() {
     var img = document.getElementById('ig-lightbox-img');
+    var cap = document.getElementById('ig-lightbox-caption');
     if (!img) return;
+    
     img.style.transform = 'translate(' + panX + 'px, ' + panY + 'px) scale(' + currentScale + ')';
     img.style.cursor = currentScale > 1 ? (isPanning ? 'grabbing' : 'grab') : 'zoom-in';
+
+    // Fade out caption while zoomed in so it doesn't obstruct the image
+    if (cap) {
+      cap.style.opacity = currentScale > 1 ? '0' : '1';
+    }
   }
 
   window.zoomIgImage = function(delta, e) {
     if (e) e.stopPropagation();
-    currentScale = Math.min(Math.max(1, currentScale + delta), 4);
+    currentScale = Math.min(Math.max(1, currentScale + delta), 4.5);
     if (currentScale === 1) {
       panX = 0;
       panY = 0;
@@ -204,8 +211,12 @@
   };
 
   window.handleLightboxBackdrop = function(e) {
-    if (e.target.id === 'ig-lightbox' || e.target.classList.contains('ig-lb-content')) {
-      closeIgLightbox(e);
+    if (e.target.id === 'ig-lightbox' || e.target.classList.contains('ig-lb-content') || e.target.id === 'igLbImgWrap') {
+      if (currentScale > 1) {
+        resetIgZoom();
+      } else {
+        closeIgLightbox(e);
+      }
     }
   };
 
@@ -218,15 +229,18 @@
     if (e.key === 'Escape') closeIgLightbox();
   }
 
-  // Pan image with mouse when zoomed in
-  var wrap = document.getElementById('igLbImgWrap');
-  if (wrap) {
-    wrap.addEventListener('mousedown', function(e) {
+  // Pan image across the entire screen when zoomed in
+  var lb = document.getElementById('ig-lightbox');
+  var img = document.getElementById('ig-lightbox-img');
+
+  if (img) {
+    img.addEventListener('mousedown', function(e) {
       if (currentScale <= 1) return;
       isPanning = true;
       startX = e.clientX - panX;
       startY = e.clientY - panY;
       updateTransform();
+      e.preventDefault();
     });
 
     window.addEventListener('mousemove', function(e) {
@@ -243,10 +257,10 @@
       }
     });
 
-    // Mouse wheel zoom
-    wrap.addEventListener('wheel', function(e) {
+    // Mouse wheel zoom over full window
+    lb.addEventListener('wheel', function(e) {
       e.preventDefault();
-      var delta = e.deltaY < 0 ? 0.2 : -0.2;
+      var delta = e.deltaY < 0 ? 0.25 : -0.25;
       zoomIgImage(delta);
     }, { passive: false });
   }
@@ -259,8 +273,7 @@
     });
   });
 
-  // Mobile swipe listener (active only when image is not zoomed in)
-  var lb = document.getElementById('ig-lightbox');
+  // Mobile touch swipe listener
   if (lb) {
     lb.addEventListener('touchstart', function(e) {
       if (currentScale > 1) return;
