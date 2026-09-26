@@ -100,6 +100,23 @@ def download_from_drive(file_id: str, dest: Path) -> None:
 
 # ------------------------------------------------------------- IG parsing
 
+def extract_video_thumbnail(video_path: Path, thumb_dest: Path) -> bool:
+    """Extracts a sharp representative frame from an mp4/mov video using ffmpeg."""
+    duration = get_video_duration(video_path)
+    # Pick a timestamp 1.0s in (or 15% if short) to avoid black intro frames
+    seek_time = min(1.5, max(0.5, duration * 0.15)) if duration > 0 else 1.0
+    
+    cmd = [
+        "ffmpeg", "-y",
+        "-ss", str(seek_time),
+        "-i", str(video_path),
+        "-frames:v", "1",
+        "-q:v", "2",
+        str(thumb_dest)
+    ]
+    res = subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+    return res.returncode == 0 and thumb_dest.exists()
+
 import urllib.parse
 
 def extract_location(post: dict) -> str:
@@ -577,7 +594,10 @@ def write_hugo_post(parsed: dict, post_id: str) -> None:
     # 3. Media handling (images + videos)
     gallery_lines = []
     video_tags = []
-    cover_name = f"01{parsed['media_files'][0]['path'].suffix.lower()}"
+    
+    first_item = parsed["media_files"][0]
+    first_is_video = first_item["is_video"]
+    cover_name = "cover.jpg" if first_is_video else f"01{first_item['path'].suffix.lower()}"
 
     for i, m in enumerate(parsed["media_files"], start=1):
         ext = m["path"].suffix.lower()
@@ -590,6 +610,15 @@ def write_hugo_post(parsed: dict, post_id: str) -> None:
             else:
                 shutil.copyfile(m["path"], dest_file)
 
+            # If this is the primary item of a video-first post, generate cover.jpg
+            if i == 1:
+                thumb_path = bundle_dir / "cover.jpg"
+                extracted = extract_video_thumbnail(dest_file, thumb_path)
+                if not extracted:
+                    # Fallback if ffmpeg couldn't extract at seek time: try first frame
+                    cmd = ["ffmpeg", "-y", "-i", str(dest_file), "-frames:v", "1", "-q:v", "2", str(thumb_path)]
+                    subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
             video_tags.append(
                 f'<video controls preload="metadata" style="width:100%; border-radius:8px; margin: 12px 0;">'
                 f'<source src="{out_name}" type="video/mp4">'
@@ -601,7 +630,7 @@ def write_hugo_post(parsed: dict, post_id: str) -> None:
             caption = m["caption"].replace("|", "-").strip()
             gallery_lines.append(f"{out_name} | {caption}" if caption else out_name)
 
-    # 4. Hugo Frontmatter
+    # 4. Hugo Frontmatter with proper image cover
     frontmatter = (
         "---\n"
         f'title: "{title.replace(chr(34), chr(39))}"\n'
