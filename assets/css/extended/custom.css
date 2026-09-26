@@ -31,38 +31,116 @@
   transform: scale(1.05);
 }
 
+.ig-gallery-video video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 @media (max-width: 600px) {
   .ig-gallery {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* --- Lightbox --- */
+/* --- Lightbox Modal --- */
 .ig-lightbox {
-  display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.9);
-  z-index: 999;
+  background: rgba(0, 0, 0, 0.92);
+  z-index: 9999;
+  display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
-  cursor: zoom-out;
+  user-select: none;
 }
 
-.ig-lightbox img {
-  max-width: 92vw;
-  max-height: 85vh;
+.ig-lb-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+#ig-lightbox-img {
+  max-width: 85vw;
+  max-height: 80vh;
   object-fit: contain;
-  border-radius: 4px;
+  border-radius: 6px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
 }
 
 .ig-lightbox-caption {
   color: #fff;
-  margin-top: 1rem;
+  margin-top: 14px;
   font-size: 0.95rem;
   text-align: center;
-  max-width: 80vw;
+  max-width: 75vw;
+  line-height: 1.4;
+}
+
+/* Lightbox Navigation Buttons */
+.ig-lb-btn {
+  position: absolute;
+  background: rgba(30, 30, 30, 0.65);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, transform 0.2s ease;
+  z-index: 10000;
+}
+
+.ig-lb-btn:hover {
+  background: rgba(0, 0, 0, 0.9);
+  transform: scale(1.08);
+}
+
+.ig-lb-close {
+  top: 24px;
+  right: 24px;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.ig-lb-prev {
+  left: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.ig-lb-prev:hover {
+  transform: translateY(-50%) scale(1.08);
+}
+
+.ig-lb-next {
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.ig-lb-next:hover {
+  transform: translateY(-50%) scale(1.08);
+}
+
+@media (max-width: 768px) {
+  .ig-lb-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+  .ig-lb-prev { left: 10px; }
+  .ig-lb-next { right: 10px; }
+  .ig-lb-close { top: 15px; right: 15px; }
+  #ig-lightbox-img { max-width: 95vw; max-height: 75vh; }
 }
 
 /* --- Opt-in music player --- */

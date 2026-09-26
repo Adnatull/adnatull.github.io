@@ -58,22 +58,112 @@
   {{ end }}
 </div>
 
-<div id="ig-lightbox" class="ig-lightbox" onclick="this.style.display='none'">
-  <img id="ig-lightbox-img" src="" alt="" />
-  <div id="ig-lightbox-caption" class="ig-lightbox-caption"></div>
+<div id="ig-lightbox" class="ig-lightbox" style="display: none;" onclick="handleLightboxBackdrop(event)">
+  <button type="button" class="ig-lb-btn ig-lb-close" onclick="closeIgLightbox(event)">&times;</button>
+  <button type="button" class="ig-lb-btn ig-lb-prev" onclick="stepIgSlide(-1, event)">&#10094;</button>
+
+  <div class="ig-lb-content" onclick="event.stopPropagation()">
+    <img id="ig-lightbox-img" src="" alt="" />
+    <div id="ig-lightbox-caption" class="ig-lightbox-caption"></div>
+  </div>
+
+  <button type="button" class="ig-lb-btn ig-lb-next" onclick="stepIgSlide(1, event)">&#10095;</button>
 </div>
 
 <script>
 (function() {
-  document.querySelectorAll('.ig-gallery-item:not(.ig-gallery-video)').forEach(function(link) {
+  var currentIndex = 0;
+  var galleryItems = [];
+  var touchStartX = 0;
+  var touchEndX = 0;
+
+  function loadGalleryItems() {
+    var links = document.querySelectorAll('.ig-gallery-item:not(.ig-gallery-video)');
+    galleryItems = Array.prototype.map.call(links, function(link) {
+      var img = link.querySelector('img');
+      return {
+        src: img ? img.src : link.getAttribute('href'),
+        caption: link.dataset.lightboxCaption || (img ? img.getAttribute('alt') : '') || ''
+      };
+    });
+  }
+
+  function showSlide(index) {
+    if (!galleryItems.length) return;
+    if (index >= galleryItems.length) {
+      currentIndex = 0;
+    } else if (index < 0) {
+      currentIndex = galleryItems.length - 1;
+    } else {
+      currentIndex = index;
+    }
+
+    var item = galleryItems[currentIndex];
+    var img = document.getElementById('ig-lightbox-img');
+    var cap = document.getElementById('ig-lightbox-caption');
+
+    img.src = item.src;
+    cap.textContent = item.caption;
+    cap.style.display = item.caption ? 'block' : 'none';
+  }
+
+  window.openIgLightbox = function(index) {
+    loadGalleryItems();
+    if (!galleryItems.length) return;
+
+    showSlide(index);
+    var lb = document.getElementById('ig-lightbox');
+    lb.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+
+    document.addEventListener('keydown', handleLightboxKeydown);
+  };
+
+  window.closeIgLightbox = function(e) {
+    if (e) e.stopPropagation();
+    var lb = document.getElementById('ig-lightbox');
+    lb.style.display = 'none';
+    document.body.style.overflow = '';
+    document.removeEventListener('keydown', handleLightboxKeydown);
+  };
+
+  window.stepIgSlide = function(direction, e) {
+    if (e) e.stopPropagation();
+    showSlide(currentIndex + direction);
+  };
+
+  window.handleLightboxBackdrop = function(e) {
+    if (e.target.id === 'ig-lightbox' || e.target.classList.contains('ig-lb-content')) {
+      closeIgLightbox(e);
+    }
+  };
+
+  function handleLightboxKeydown(e) {
+    if (e.key === 'ArrowRight') stepIgSlide(1);
+    if (e.key === 'ArrowLeft') stepIgSlide(-1);
+    if (e.key === 'Escape') closeIgLightbox();
+  }
+
+  // Bind click listener to each gallery image
+  document.querySelectorAll('.ig-gallery-item:not(.ig-gallery-video)').forEach(function(link, idx) {
     link.addEventListener('click', function(e) {
       e.preventDefault();
-      var img = link.querySelector('img');
-      var lb = document.getElementById('ig-lightbox');
-      document.getElementById('ig-lightbox-img').src = img.src;
-      document.getElementById('ig-lightbox-caption').textContent = link.dataset.lightboxCaption || '';
-      lb.style.display = 'flex';
+      openIgLightbox(idx);
     });
   });
+
+  // Mobile swipe listener
+  var lb = document.getElementById('ig-lightbox');
+  if (lb) {
+    lb.addEventListener('touchstart', function(e) {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    lb.addEventListener('touchend', function(e) {
+      touchEndX = e.changedTouches[0].screenX;
+      if (touchStartX - touchEndX > 50) stepIgSlide(1);
+      if (touchEndX - touchStartX > 50) stepIgSlide(-1);
+    }, { passive: true });
+  }
 })();
 </script>
