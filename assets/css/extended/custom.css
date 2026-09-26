@@ -146,6 +146,19 @@
   padding: 10px 0;
 }
 
+/* Ensure full bio/intro text displays without truncation */
+.first-entry .entry-content,
+.home-info .entry-content,
+.profile .entry-content {
+  display: block !important;
+  -webkit-line-clamp: unset !important;
+  max-height: none !important;
+  overflow: visible !important;
+  color: inherit;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
 /* Post Cards */
 .list:not(.single) .post-entry {
   display: flex;
@@ -181,12 +194,12 @@
   transform: scale(1.04);
 }
 
-/* Post header & text styling */
-.list:not(.single) .entry-header {
+/* Post header & text styling (clamped to 2 lines only on cards) */
+.list:not(.single) .post-entry .entry-header {
   padding: 12px 14px 6px;
 }
 
-.list:not(.single) .entry-header h2 {
+.list:not(.single) .post-entry .entry-header h2 {
   font-size: 1rem;
   line-height: 1.35;
   margin: 0;
@@ -196,7 +209,7 @@
   overflow: hidden;
 }
 
-.list:not(.single) .entry-content {
+.list:not(.single) .post-entry .entry-content {
   padding: 0 14px 8px;
   font-size: 0.85rem;
   color: var(--secondary);
@@ -206,7 +219,7 @@
   overflow: hidden;
 }
 
-.list:not(.single) .entry-footer {
+.list:not(.single) .post-entry .entry-footer {
   padding: 0 14px 12px;
   font-size: 0.78rem;
   color: var(--secondary);
