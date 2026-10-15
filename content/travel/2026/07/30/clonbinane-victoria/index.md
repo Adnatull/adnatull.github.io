@@ -1,5 +1,5 @@
 ---
-title: "Clonbinane, Victoria"
+title: "Strath Creek Falls"
 date: 2026-07-30
 draft: false
 location: "Clonbinane, Victoria"
